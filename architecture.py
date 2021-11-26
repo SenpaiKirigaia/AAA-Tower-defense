@@ -1,3 +1,4 @@
+import pygame as pg
 
 
 class Msg:
@@ -20,7 +21,24 @@ class Msg:
         self.address = address
 
 
-class Manager():
+class PyGameMsg:
+    '''
+    Wrapper for pygame event
+    '''
+
+    def __init__(self, pg_event):
+        '''
+        Init method for a pygame event wrapper message
+        :params pg_event: pygame event to wrap
+        '''
+        content = {
+                    'event_args': pg_event.__dict__,
+                    'event_type': pg_event.type
+                  }
+        super().__init__(content=content)
+
+
+class Manager:
     '''
     Class of a manager
     All types of manager classes should be inherited from it
@@ -30,7 +48,7 @@ class Manager():
 
     class ADD_OBJ(Msg):
         '''
-        class of ADD_OBJ message for Manager
+        Class of ADD_OBJ message for Manager
         '''
 
         def __init__(target, sender=None, address=None):
@@ -49,7 +67,7 @@ class Manager():
 
     class REMOVE_OBJ(Msg):
         '''
-        class of REMOVED_OBJ message for Manager
+        Class of REMOVED_OBJ message for Manager
         '''
 
         def __init__(target, sender=None, address=None):
@@ -77,6 +95,7 @@ class Manager():
         Method that describes Manager reaction to msg
         :param msg: message the Manager will react to
         '''
+
         if isinstance(msg, Manager.ADD_OBJ):
             if msg.content["target"] not in self.employees:
                 self.employees.append(msg.content["target"])
@@ -89,3 +108,121 @@ class Manager():
         '''
         Method that describes Manager default behaviour
         '''
+
+        pass
+
+
+class EventManager(Manager):
+    '''
+    Class of an event manager
+    '''
+
+    class Employee:
+        '''
+        Class of employee object event manager can manage
+        '''
+
+        def __init__(self, event_manager):
+            '''
+            Init method for employee
+            :param event_manager: event manager that will manage
+                                  this employee
+            '''
+            self.event_manager = event_manager
+
+            add_msg = Manager.ADD_OBJ(target=self,
+                                      address=self.event_manager)
+            self.event_manager.post(add_msg)
+
+        def call(self, msg):
+            '''
+            Method that describes Employee reaction to msg
+            :param msg: message the Employee will react to
+            '''
+
+            pass
+
+        def run(self):
+            '''
+            Method that describes Employee default behaviour
+            '''
+
+            pass
+
+    def __init__(self, event_manager=None):
+        '''
+        Init method of a event manager
+        '''
+        super().__init__()
+        self.msg_queue = []
+        self.event_manager = event_manager
+
+        if self.event_manager is not None:
+            add_msg = Manager.ADD_OBJ(target=self,
+                                      address=self.event_manager)
+            self.event_manager.post(add_msg)
+
+    def run(self):
+        '''
+        Method that describes EventManager default behaviour
+        '''
+
+        for msg in self.msg_queue:
+            if msg.address is self:
+                self.call(msg)
+            for employee in self.employees:
+                employee.call(msg)
+
+        for employee in self.employees:
+            employee.run()
+
+    def post(self, msg):
+        '''
+        Method that adds msg to the message queue
+        :param msg: message to be posted
+        '''
+
+        self.queue.append(msg)
+
+
+class MasterEventManager(EventManager):
+    '''
+    class of master event manager
+    '''
+
+    def __init__(self):
+        '''
+        Init method of a master event manager
+        '''
+
+        self.running = True
+        super().__init__()
+
+    def run(self):
+        '''
+        Method that describes MasterEventManager default behaviour
+        '''
+
+        for event in pg.get_event():
+            msg = PyGameMsg(event)
+            self.call(msg)
+            for employee in self.employee:
+                employee.call(msg)
+
+        for employee in self.employees:
+            employee.run()
+
+        return self.running
+
+    def call(self, msg):
+        '''
+        Method that describes MasterEventManager reaction to msg
+        :param msg: message the MasterEventManager will react to
+        '''
+
+        if isinstance(msg, PyGameMsg):
+            if msg.content["type"] == pg.QUIT:
+                self.running = False
+
+        else:
+            super().call(msg)
