@@ -97,12 +97,14 @@ class Manager:
         '''
 
         if isinstance(msg, Manager.ADD_OBJ):
-            if msg.content["target"] not in self.employees:
-                self.employees.append(msg.content["target"])
+            if msg.address is self:
+                if msg.content["target"] not in self.employees:
+                    self.employees.append(msg.content["target"])
 
         elif isinstance(msg, Manager.REMOVE_OBJ):
-            if msg.content["target"] in self.employees:
-                self.employees.remove(msg.content["target"])
+            if msg.address is self:
+                if msg.content["target"] in self.employees:
+                    self.employees.remove(msg.content["target"])
 
     def run(self):
         '''
@@ -112,9 +114,9 @@ class Manager:
         pass
 
 
-class EventManager(Manager):
+class BaseEventManager(Manager):
     '''
-    Class of an event manager
+    Class of an base event manager
     '''
 
     class Employee:
@@ -149,22 +151,16 @@ class EventManager(Manager):
 
             pass
 
-    def __init__(self, event_manager=None):
+    def __init__(self):
         '''
-        Init method of a event manager
+        Init method of a base event manager
         '''
         super().__init__()
         self.msg_queue = []
-        self.event_manager = event_manager
-
-        if self.event_manager is not None:
-            add_msg = Manager.ADD_OBJ(target=self,
-                                      address=self.event_manager)
-            self.event_manager.post(add_msg)
 
     def run(self):
         '''
-        Method that describes EventManager default behaviour
+        Method that describes base event manager default behaviour
         '''
 
         for msg in self.msg_queue:
@@ -185,17 +181,50 @@ class EventManager(Manager):
         self.queue.append(msg)
 
 
-class MasterEventManager(EventManager):
+class EventManager(BaseEventManager, BaseEventManager.Employee):
+    '''
+    Subclass of BaseEventManager that can be managed by another
+    event manager
+    '''
+
+    def __init__(self, event_manager):
+        '''
+        Init method of a event manager
+        :param event_manager: event manager that will manage
+                              this event manager
+
+        '''
+        self.clock = Clock(self, event_manager.clock)
+        BaseEventManager.__init__(self)
+        BaseEventManager.Employee__init__(self, event_manager)
+
+    def run(self):
+        '''
+        Method that describes event manager default behaviour
+        '''
+        BaseEventManager.run(self)
+
+    def call(self, msg):
+        '''
+        Method that describes event manager reaction to msg
+        :param msg: message the event manager will react to
+        '''
+        BaseEventManager.call(self, msg)
+
+
+class MasterEventManager(BaseEventManager):
     '''
     class of master event manager
     '''
 
-    def __init__(self):
+    def __init__(self, FPS):
         '''
         Init method of a master event manager
+        :param FPS: FPS of the program
         '''
 
         self.running = True
+        self.clock = MasterClock(self, FPS)
         super().__init__()
 
     def run(self):
@@ -226,3 +255,131 @@ class MasterEventManager(EventManager):
 
         else:
             super().call(msg)
+
+
+class Clock(Manager, EventManager.Employee):
+    '''
+    Class of a clock(time manager)
+    '''
+
+    def __init__(self, event_manager, base_clock, scale=1):
+        '''
+        Init method of a clock
+        :param event_manager: event manager that will manage this clock
+        :param base_clock: base clock that will manage this clock
+        :param scale: scale of clock, i.e how many
+                      seconds will pass per one real second
+
+        '''
+        self.dt = 0
+        self.running = False
+        self.scale = scale
+        self.current_time = 0
+        self.base_clock = base_clock
+
+        Manager.__init__(self)
+        EventManager.Employee.__init__(self, event_manager)
+        add_msg = Manager.ADD_OBJ(target=self,
+                                  address=base_clock)
+        self.base_clock.event_manager.post(add_msg)
+
+    def run(self):
+        '''
+        Method that describes clock default behaviour
+        '''
+
+        if self.running:
+            for employee in self.employees:
+                employee.update(self.dt)
+
+    def update(self, dt):
+        '''
+        Method that updates the clock
+        :param dt: dt of the base clock
+        '''
+
+        if self.running:
+            self.dt = self.scale * dt
+            self.current_time += self.dt
+
+    def get_time(self):
+        '''
+        Method that returns passed time
+        '''
+
+        return self.current_time
+
+    def get_tick(self):
+        '''
+        Method that returns last dt
+        '''
+
+        return self.dt
+
+    def play(self):
+        '''
+        Method that activates the clock
+        '''
+
+        self.running = True
+
+    def pause(self):
+        '''
+        Method that pauses the clock
+        '''
+
+        self.running = False
+        self.dt = 0
+
+    def restart(self, init_time=0):
+        '''
+        Method that restarts the clock
+        :param init_time: time that will be set after
+                          the start, default value is 0
+        '''
+
+        self.current_time = init_time
+
+    def change_flow(self, scale):
+        '''
+        Method that sets new scale of the clock
+        '''
+
+        self.scale = scale
+
+
+class MasterClock(Manager, EventManager.Employee):
+    '''
+    Class of a master clock
+    '''
+
+    def __init__(self, event_manager, FPS):
+        '''
+        Init method of the master clock
+        :param event_manager: event manager that will manage this
+                              master clock
+        :param FPS: FPS of the master clock
+        '''
+
+        self.FPS = FPS
+        self.pg_clock = pg.time.Clock()
+        self.current_time = 0
+        Manager.__init__(self)
+        EventManager.Employee(self, event_manager)
+
+    def run(self):
+        '''
+        Method that describes master clock default behaviour
+        '''
+
+        self.dt = self.pg_clocl.tick(self.FPS) / 1000
+        self.current += self.dt
+        for employee in self.employees:
+            employee.update(self.dt)
+
+    def get_time(self):
+        '''
+        Method that returns passed time
+        '''
+
+        return self.current_time
