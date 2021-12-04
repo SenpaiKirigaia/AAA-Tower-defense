@@ -383,3 +383,117 @@ class MasterClock(Manager, EventManager.Employee):
         '''
 
         return self.current_time
+
+
+class BaseCanvas(Manager, EventManager.Employee):
+    '''
+    Class of a base canvas (base visual manager)
+    '''
+
+    class DrawableObj:
+        '''
+        Class of a drawable object
+        '''
+
+        def __init__(self, visual_manager, pos):
+            '''
+            Init method of the drawable object
+            :param visual_manager: visual manager that will
+                                   manage this drawable
+                                   object
+            :param pos: list with the position of top left
+                        corner of the drawable object
+            '''
+            self.visual_manager
+            add_msg = Manager.ADD_OBJ(target=self,
+                                      address=visual_manager)
+            visual_manager.event_manager.post(add_msg)
+
+        def draw(self):
+            '''
+            Method that draws the object
+            '''
+
+            pass
+
+    def __init__(self, event_manager, size, bg_color=(255, 255, 255, 0)):
+        '''
+        Init method of the base canvas
+        :param event_manager: event manager that will manage this
+                              canvas
+        :param size: list with the size of the canvas
+        :param bg_color: background color of the canvas
+        '''
+
+        self.size = size
+        self.surf = pg.Surface(self.size, pg.SRCALPHA)
+        self.bg_color = bg_color
+
+        Manager.__init__(self)
+        EventManager.Employee.__init__(self, event_manager)
+
+    def run(self):
+        '''
+        Method that describes base visual manager default behaviour
+        '''
+
+        self.surf.fill(self.bg_color)
+        for employee in self.employees:
+            employee.draw()
+
+
+class Canvas(BaseCanvas, BaseCanvas.DrawableObj):
+    '''
+    Subclass of BaseCanvas that can be managed
+    by another visual manager
+    '''
+
+    def __init__(self, event_manager, visual_manager, size, pos,
+                 bg_color=(255, 255, 255, 0)):
+        '''
+        Init method of the canvas
+        :param event_manager: event manager that will manage this
+                              canvas
+        :param visual_manager: visual manager that will manage this
+                               canvas
+        :param size: list with the size of the canvas
+        :param pos: list with the position of top left
+                   corner of the canvas
+        :param bg_color: background color of the canvas
+        '''
+
+        BaseCanvas.__init__(self, event_manager, size, bg_color)
+        BaseCanvas.DrawableObj.__init__(self, visual_manager)
+
+    def draw(self):
+        '''
+        Method that draws the canvas
+        '''
+
+        self.visual_manager.surf.blit(self.surf, self.pos)
+
+
+class MasterCanvas(BaseCanvas):
+    '''
+    Class of master canvas (main surface of whole app)
+    '''
+
+    def __init__(self, event_manager, size, bg_color=(255, 255, 255, 0)):
+        '''
+        Init method of the master canvas
+        :param event_manager: event manager that will manage this
+                              canvas
+        :param size: list with the size of the canvas (size of the window)
+        :param bg_color: background color of the canvas
+        '''
+
+        super().__init__(event_manager, size, bg_color)
+        self.surf = pg.display.set_mode(self.size)
+
+    def run(self):
+        '''
+        Method that describes base visual manager default behaviour
+        '''
+
+        super().run()
+        pg.display.update()
