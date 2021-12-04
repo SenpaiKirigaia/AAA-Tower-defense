@@ -1,4 +1,5 @@
 import pygame as pg
+import pygame_gui as pg_gui
 
 
 class Msg:
@@ -52,8 +53,7 @@ class PyGameMsg:
         :param pg_event: pygame event, который нужно обернуть
         '''
         content = {
-                    'event_args': pg_event.__dict__,
-                    'event_type': pg_event.type
+                    'event': pg_event
                   }
         super().__init__(content=content)
 
@@ -96,8 +96,8 @@ class Manager:
             :param sender:  ссылка на отправителя сообщения,
                             дефолтное значение - None(анонимное сообщение)
             :param address: ссылка на получателя сообщения,
-                            дефолтное значение - None(сообщение будет доставленно
-                            всем локальным объектам)
+                            дефолтное значение - None(сообщение будет
+                            доставленно всем локальным объектам)
             '''
             content = {"target": target}
             super().__init__(content, sender, address)
@@ -128,8 +128,8 @@ class Manager:
             :param sender:  ссылка на отправителя сообщения,
                             дефолтное значение - None(анонимное сообщение)
             :param address: ссылка на получателя сообщения,
-                            дефолтное значение - None(сообщение будет доставленно
-                            всем локальным объектам)
+                            дефолтное значение - None(сообщение будет
+                            доставленно всем локальным объектам)
             '''
             content = {"target": target}
             super().__init__(content, sender, address)
@@ -354,7 +354,7 @@ class MasterEventManager(BaseEventManager):
         событий
         '''
 
-        for event in pg.get_event():
+        for event in pg.event.get():
             msg = PyGameMsg(event)
             self.call(msg)
             for employee in self.employee:
@@ -377,7 +377,7 @@ class MasterEventManager(BaseEventManager):
         '''
 
         if isinstance(msg, PyGameMsg):
-            if msg.content["type"] == pg.QUIT:
+            if msg.content["event"].type == pg.QUIT:
                 self.running = False
 
         else:
@@ -549,6 +549,41 @@ class BaseCanvas(Manager, EventManager.Employee):
     Класс базового холста (базовый менеджер отрисовки)
     '''
 
+    # Messages for BaseCanvas object
+
+    class SET_GUI(Msg):
+        '''
+        Class of ADD_OBJ message for Manager
+        '''
+        '''
+        Класс SET_GUI сообщения для менеджера
+        '''
+
+        def __init__(target, sender=None, address=None):
+            '''
+            Init method for a SET_GUI message object
+            :param target: link to the GUI object
+            :param sender: link to the sender of the message,
+                           default value is None (anonymous message)
+            :param address: link to the addressee of the message,
+                            default value is None (message wil be delivered
+                            to all local objects)
+            '''
+            '''
+            Метод инциалиации SET_GUI сообщения
+            :param target: ссылка на объект графческого пользовательского
+                           интерфейса
+            :param sender:  ссылка на отправителя сообщения,
+                            дефолтное значение - None(анонимное сообщение)
+            :param address: ссылка на получателя сообщения,
+                            дефолтное значение - None(сообщение будет
+                            доставленно всем локальным объектам)
+            '''
+            content = {"target": target}
+            super().__init__(content, sender, address)
+
+    # Employees of BaseCanvas object
+
     class DrawableObj:
         '''
         Class of a drawable object
@@ -608,9 +643,26 @@ class BaseCanvas(Manager, EventManager.Employee):
         self.size = size
         self.surf = pg.Surface(self.size, pg.SRCALPHA)
         self.bg_color = bg_color
+        self.gui = None
 
         Manager.__init__(self)
         EventManager.Employee.__init__(self, event_manager)
+
+    def call(self, msg):
+        '''
+        Method that describes base canvas reaction to msg
+        :param msg: message the base canvas will react to
+        '''
+        '''
+        Метод, описывающий реакциию базового холста на полученное
+        сообщение
+        :param msg: сообщение, отправленное базовому холсту
+        '''
+
+        Manager.call(self, msg)
+        if isinstance(msg, BaseCanvas.SET_GUI):
+            if msg.address is self:
+                self.gui = msg.content["target"]
 
     def run(self):
         '''
@@ -623,6 +675,9 @@ class BaseCanvas(Manager, EventManager.Employee):
         self.surf.fill(self.bg_color)
         for employee in self.employees:
             employee.draw()
+
+        if self.gui is not None:
+            self.gui.draw()
 
 
 class Canvas(BaseCanvas, BaseCanvas.DrawableObj):
@@ -708,3 +763,99 @@ class MasterCanvas(BaseCanvas):
 
         super().run()
         pg.display.update()
+
+
+class GUI(EventManager.Employee):
+    '''
+    Class of GUI
+    '''
+    '''
+    Класс графического пользовательского интерфейса (ГПИ)
+    '''
+
+    Button = pg_gui.elements.ui_button.UIButton
+    button_events = (
+                     pg_gui.UI_BUTTON_PRESSED,
+                     pg_gui.UI_BUTTON_DOUBLE_CLICKED,
+                     pg_gui.UI_BUTTON_ON_HOVERED,
+                     pg_gui.UI_BUTTON_ON_UNHOVERED,
+                    )
+
+    def __init__(self, event_manager, visual_manager):
+        '''
+        Init method of the GUI
+        :param event_manager: event manager that will manage this
+                              GUI
+        :param visual_manager: visual manager that will manage this
+                               GUI
+        '''
+        '''
+        Метод иницализации ГПИ
+        :param event_manager: менеджер событий, управляющий данным
+                              ГПИ
+        :param visual_manager: холст, на котором будет отрисован
+                               данный ГПИ
+        '''
+
+        EventManager.Employee.__init__(self, event_manager)
+
+        self.visual_manager = visual_manager
+        add_msg = Canvas.SET_GUI(target=self, address=self.visual_manager)
+        self.event_manager.post(add_msg)
+
+        self.clock = Clock(self.event_manager, self.event_manager.clock)
+        self.clock.play()
+
+        self.ui_manager = pg_gui.UI_Manager(self.visual_manager.size)
+        self.buttons = dict()
+
+    def draw(self):
+        '''
+        Method that draws the GUI
+        '''
+        '''
+        Метод, отрисовывающий ГПИ на холсте
+        '''
+        self.ui_manager.draw_ui(self.visual_manager.surf)
+
+    def run(self):
+        '''
+        Method that describes GUI default behaviour
+        '''
+        '''
+        Метод, описывающий дефолтное поведение ГПИ
+        '''
+
+        self.event_manager.update(self.clock.get_tick())
+
+    def call(self, msg):
+        '''
+        Method that describes GUI reaction to msg
+        :param msg: message the GUI will react to
+        '''
+        '''
+        Метод, описывающий реакциию ГПИ на полученное
+        сообщение
+        :param msg: сообщение, отправленное ГПИ
+        '''
+
+        if isinstance(msg, PyGameMsg):
+            event = msg.content['event']
+            self.ui_manager.proccess_events(event)
+            if event.type == pg.USEREVENT:
+                if event.user_type in GUI.button_events:
+                    self.button_hadling(event)
+
+    def button_handling(self, event):
+        '''
+        Method for proccessing of button related events
+        :param event: button related pygame event,
+                      gui should proccess
+        '''
+        '''
+        Метод, обрабатывающий события кнопок
+        :param event: pygame event связанный с кнопками,
+                      которое ГПИ должен обработать
+        '''
+
+        pass
