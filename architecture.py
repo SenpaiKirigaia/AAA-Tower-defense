@@ -5,6 +5,9 @@ class Msg:
     '''
     Class of a message
     '''
+    '''
+    Класс сообщений
+    '''
 
     def __init__(self, content=dict(), sender=None, address=None):
         '''
@@ -16,6 +19,16 @@ class Msg:
                         default value is None (message wil be delivered
                         to all local objects)
         '''
+        '''
+        Инициализирующий метод объекта сообщения
+        :param content: словарь с содержанием сообщения
+        :param sender:  ссылка на отправителя сообщения,
+                        дефолтное значение - None(анонимное сообщение)
+        :param address: ссылка на получателя сообщения,
+                        дефолтное значение - None(сообщение будет доставленно
+                        всем локальным объектам)
+
+        '''
         self.content = content
         self.sender = sender
         self.address = address
@@ -25,11 +38,18 @@ class PyGameMsg:
     '''
     Wrapper for pygame event
     '''
+    '''
+    Обертка для pygame event в виде сообщения
+    '''
 
     def __init__(self, pg_event):
         '''
         Init method for a pygame event wrapper message
         :params pg_event: pygame event to wrap
+        '''
+        '''
+        Метод инициализации сообщения, оборочивающего pygame event
+        :param pg_event: pygame event, который нужно обернуть
         '''
         content = {
                     'event_args': pg_event.__dict__,
@@ -43,12 +63,19 @@ class Manager:
     Class of a manager
     All types of manager classes should be inherited from it
     '''
+    '''
+    Класс менеджеров
+    Все типы менеджеров должны быть унаследованы от этого класса
+    '''
 
     # Messages for Manager object
 
     class ADD_OBJ(Msg):
         '''
         Class of ADD_OBJ message for Manager
+        '''
+        '''
+        Класс ADD_OBJ сообщения для менеджера
         '''
 
         def __init__(target, sender=None, address=None):
@@ -62,12 +89,25 @@ class Manager:
                             default value is None (message wil be delivered
                             to all local objects)
             '''
+            '''
+            Метод инциалиации ADD_OBJ сообщения
+            :param target: ссылка на объект, который нужно добавить
+                           в список рабочих менеджера
+            :param sender:  ссылка на отправителя сообщения,
+                            дефолтное значение - None(анонимное сообщение)
+            :param address: ссылка на получателя сообщения,
+                            дефолтное значение - None(сообщение будет доставленно
+                            всем локальным объектам)
+            '''
             content = {"target": target}
             super().__init__(content, sender, address)
 
     class REMOVE_OBJ(Msg):
         '''
         Class of REMOVED_OBJ message for Manager
+        '''
+        '''
+        Класс REMOVE_OBJ сообщения для менеджера
         '''
 
         def __init__(target, sender=None, address=None):
@@ -81,6 +121,16 @@ class Manager:
                             default value is None (message wil be delivered
                             to all local objects)
             '''
+            '''
+            Метод инциалиации REMOVE_OBJ сообщения
+            :param target: ссылка на объект, который нужно удалить
+                           из списка рабочих менеджера
+            :param sender:  ссылка на отправителя сообщения,
+                            дефолтное значение - None(анонимное сообщение)
+            :param address: ссылка на получателя сообщения,
+                            дефолтное значение - None(сообщение будет доставленно
+                            всем локальным объектам)
+            '''
             content = {"target": target}
             super().__init__(content, sender, address)
 
@@ -88,12 +138,20 @@ class Manager:
         '''
         Init method for a Manager object
         '''
+        '''
+        Метод инициализации менеджера
+        '''
         self.employees = []
 
     def call(self, msg):
         '''
         Method that describes Manager reaction to msg
         :param msg: message the Manager will react to
+        '''
+        '''
+        Метод, описывающий реакциию Менеджера на полученное
+        сообщение
+        :param msg: сообщение, отправленное менеджеру
         '''
 
         if isinstance(msg, Manager.ADD_OBJ):
@@ -110,6 +168,9 @@ class Manager:
         '''
         Method that describes Manager default behaviour
         '''
+        '''
+        Метод, описывающий дефолтное поведение Менеджера
+        '''
 
         pass
 
@@ -118,10 +179,16 @@ class BaseEventManager(Manager):
     '''
     Class of an base event manager
     '''
+    '''
+    Базовый класс обработчик событий
+    '''
 
     class Employee:
         '''
         Class of employee object event manager can manage
+        '''
+        '''
+        Класс работника, которым может управлять менеджер событий
         '''
 
         def __init__(self, event_manager):
@@ -130,6 +197,12 @@ class BaseEventManager(Manager):
             :param event_manager: event manager that will manage
                                   this employee
             '''
+            '''
+            Метод инициализации работника
+            :param event_manager: обработчик событий, управляющий данным
+                                  объектом
+            '''
+
             self.event_manager = event_manager
 
             add_msg = Manager.ADD_OBJ(target=self,
@@ -141,6 +214,11 @@ class BaseEventManager(Manager):
             Method that describes Employee reaction to msg
             :param msg: message the Employee will react to
             '''
+            '''
+            Метод, описывающий реакциию Работника на полученное
+            сообщение
+            :param msg: сообщение, отправленное работнику
+            '''
 
             pass
 
@@ -148,12 +226,16 @@ class BaseEventManager(Manager):
             '''
             Method that describes Employee default behaviour
             '''
+            '''
+            Метод, описывающий дефолтное поведение работника
+            '''
 
             pass
 
     def __init__(self):
         '''
         Init method of a base event manager
+        Метод инициализиции базового обработчика событий
         '''
         super().__init__()
         self.msg_queue = []
@@ -161,6 +243,10 @@ class BaseEventManager(Manager):
     def run(self):
         '''
         Method that describes base event manager default behaviour
+        '''
+        '''
+        Метод, описывающий дефолтное поведение базового обработчика
+        событий
         '''
 
         for msg in self.msg_queue:
@@ -177,6 +263,10 @@ class BaseEventManager(Manager):
         Method that adds msg to the message queue
         :param msg: message to be posted
         '''
+        '''
+        Метод, добавляющий сообщение в очередь сообщений
+        :param msg:
+        '''
 
         self.queue.append(msg)
 
@@ -186,6 +276,10 @@ class EventManager(BaseEventManager, BaseEventManager.Employee):
     Subclass of BaseEventManager that can be managed by another
     event manager
     '''
+    '''
+    Подкласс базового обработчика событий, которым может управлять
+    другой обработчик событий
+    '''
 
     def __init__(self, event_manager):
         '''
@@ -194,6 +288,12 @@ class EventManager(BaseEventManager, BaseEventManager.Employee):
                               this event manager
 
         '''
+        '''
+        Метод инициализации обработчика событий
+        :param event_manager: обработчик событий, управляющий данным
+                              объектом
+        '''
+
         self.clock = Clock(self, event_manager.clock)
         BaseEventManager.__init__(self)
         BaseEventManager.Employee__init__(self, event_manager)
@@ -202,6 +302,11 @@ class EventManager(BaseEventManager, BaseEventManager.Employee):
         '''
         Method that describes event manager default behaviour
         '''
+        '''
+        Метод, описывающий дефолтное поведение обработчика
+        событий
+        '''
+
         BaseEventManager.run(self)
 
     def call(self, msg):
@@ -209,18 +314,31 @@ class EventManager(BaseEventManager, BaseEventManager.Employee):
         Method that describes event manager reaction to msg
         :param msg: message the event manager will react to
         '''
+        '''
+        Метод, описывающий реакциию обработчика событий на полученное
+        сообщение
+        :param msg: сообщение, отправленное обработчику событий
+        '''
+
         BaseEventManager.call(self, msg)
 
 
 class MasterEventManager(BaseEventManager):
     '''
-    class of master event manager
+    Class of master event manager
+    '''
+    '''
+    Класс главного обработчика событий
     '''
 
     def __init__(self, FPS):
         '''
         Init method of a master event manager
         :param FPS: FPS of the program
+        '''
+        '''
+        Метод инициализации главного обработчика событий
+        :param FPS: FPS программы
         '''
 
         self.running = True
@@ -230,6 +348,10 @@ class MasterEventManager(BaseEventManager):
     def run(self):
         '''
         Method that describes MasterEventManager default behaviour
+        '''
+        '''
+        Метод, описывающий дефолтное поведение главно обработчика
+        событий
         '''
 
         for event in pg.get_event():
@@ -248,6 +370,11 @@ class MasterEventManager(BaseEventManager):
         Method that describes MasterEventManager reaction to msg
         :param msg: message the MasterEventManager will react to
         '''
+        '''
+        Метод, описывающий реакциию главного обработчика событий на полученное
+        сообщение
+        :param msg: сообщение, отправленное главному обработчику событий
+        '''
 
         if isinstance(msg, PyGameMsg):
             if msg.content["type"] == pg.QUIT:
@@ -261,6 +388,9 @@ class Clock(Manager, EventManager.Employee):
     '''
     Class of a clock(time manager)
     '''
+    '''
+    Класс часов(менеджера времени)
+    '''
 
     def __init__(self, event_manager, base_clock, scale=1):
         '''
@@ -269,7 +399,13 @@ class Clock(Manager, EventManager.Employee):
         :param base_clock: base clock that will manage this clock
         :param scale: scale of clock, i.e how many
                       seconds will pass per one real second
-
+        '''
+        '''
+        Метод инициализации часов
+        :param event_manager: менеджер событий, управляющий данными
+                              часами
+        :param base_clock: часы, от которых будут зависеть данные часы
+        :param scale: относительная скорость течения времени
         '''
         self.dt = 0
         self.running = False
@@ -287,6 +423,9 @@ class Clock(Manager, EventManager.Employee):
         '''
         Method that describes clock default behaviour
         '''
+        '''
+        Метод, описывающий дефолтное поведение часов
+        '''
 
         if self.running:
             for employee in self.employees:
@@ -297,6 +436,11 @@ class Clock(Manager, EventManager.Employee):
         Method that updates the clock
         :param dt: dt of the base clock
         '''
+        '''
+        Метод обновления часов
+        :param dt: изменение времени часов, от которых зависят данные
+                   часы
+        '''
 
         if self.running:
             self.dt = self.scale * dt
@@ -306,12 +450,18 @@ class Clock(Manager, EventManager.Employee):
         '''
         Method that returns passed time
         '''
+        '''
+        Метод, возращающий текущее время
+        '''
 
         return self.current_time
 
     def get_tick(self):
         '''
         Method that returns last dt
+        '''
+        '''
+        Метод, возвращающий последнее изменение времени
         '''
 
         return self.dt
@@ -320,12 +470,18 @@ class Clock(Manager, EventManager.Employee):
         '''
         Method that activates the clock
         '''
+        '''
+        Метод, запускающий часы
+        '''
 
         self.running = True
 
     def pause(self):
         '''
         Method that pauses the clock
+        '''
+        '''
+        Метод, останавливающий часы
         '''
 
         self.running = False
@@ -389,10 +545,16 @@ class BaseCanvas(Manager, EventManager.Employee):
     '''
     Class of a base canvas (base visual manager)
     '''
+    '''
+    Класс базового холста (базовый менеджер отрисовки)
+    '''
 
     class DrawableObj:
         '''
         Class of a drawable object
+        '''
+        '''
+        Класс объекта, который может быть отрисован на холсте
         '''
 
         def __init__(self, visual_manager, pos):
@@ -404,6 +566,14 @@ class BaseCanvas(Manager, EventManager.Employee):
             :param pos: list with the position of top left
                         corner of the drawable object
             '''
+            '''
+            Метод инциализия рисуемого объекта
+            :param visual_manager: холст, на котором будет отрисован
+                                   данный объект
+            :param pos: список с координатами левого верхнего угла
+                        рисуемого объекта
+
+            '''
             self.visual_manager
             add_msg = Manager.ADD_OBJ(target=self,
                                       address=visual_manager)
@@ -412,6 +582,9 @@ class BaseCanvas(Manager, EventManager.Employee):
         def draw(self):
             '''
             Method that draws the object
+            '''
+            '''
+            Метод, отрисовывающий объект на холсте
             '''
 
             pass
@@ -423,6 +596,13 @@ class BaseCanvas(Manager, EventManager.Employee):
                               canvas
         :param size: list with the size of the canvas
         :param bg_color: background color of the canvas
+        '''
+        '''
+        Метод иницализации базового холста
+        :param event_manager: менеджер событий, управляющий данным
+                              холсто
+        :param size: список с размерами холста
+        :param bg_color: фоновый цвет холоста
         '''
 
         self.size = size
@@ -436,6 +616,9 @@ class BaseCanvas(Manager, EventManager.Employee):
         '''
         Method that describes base visual manager default behaviour
         '''
+        '''
+        Метод, описывающий дефолтное поведение холста
+        '''
 
         self.surf.fill(self.bg_color)
         for employee in self.employees:
@@ -446,6 +629,10 @@ class Canvas(BaseCanvas, BaseCanvas.DrawableObj):
     '''
     Subclass of BaseCanvas that can be managed
     by another visual manager
+    '''
+    '''
+    Подкласс базового холста, который может отрисовываться на другом
+    холсте
     '''
 
     def __init__(self, event_manager, visual_manager, size, pos,
@@ -460,6 +647,17 @@ class Canvas(BaseCanvas, BaseCanvas.DrawableObj):
         :param pos: list with the position of top left
                    corner of the canvas
         :param bg_color: background color of the canvas
+        '''
+        '''
+        Метод иницализации холста
+        :param event_manager: менеджер событий, управляющий данным
+                              холсто
+        :param visual_manager: холст, на котором будет отрисован
+                               данный холст
+        :param size: список с размерами холста
+        :param pos: список с координатами левого верхнего угла
+                    холста
+        :param bg_color: фоновый цвет холоста
         '''
 
         BaseCanvas.__init__(self, event_manager, size, bg_color)
@@ -477,6 +675,9 @@ class MasterCanvas(BaseCanvas):
     '''
     Class of master canvas (main surface of whole app)
     '''
+    '''
+    Класс главного холста всего приложения
+    '''
 
     def __init__(self, event_manager, size, bg_color=(255, 255, 255, 0)):
         '''
@@ -486,13 +687,23 @@ class MasterCanvas(BaseCanvas):
         :param size: list with the size of the canvas (size of the window)
         :param bg_color: background color of the canvas
         '''
+        '''
+        Метод иницализации главного холста
+        :param event_manager: менеджер событий, управляющий данным
+                              холсто
+        :param size: список с размерами холста (размеры окна)
+        :param bg_color: фоновый цвет холоста
+        '''
 
         super().__init__(event_manager, size, bg_color)
         self.surf = pg.display.set_mode(self.size)
 
     def run(self):
         '''
-        Method that describes base visual manager default behaviour
+        Method that describes master visual manager default behaviour
+        '''
+        '''
+        Метод, описывающий дефолтное поведение главного холста
         '''
 
         super().run()
