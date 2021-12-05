@@ -35,7 +35,7 @@ class Msg:
         self.address = address
 
 
-class PyGameMsg:
+class PyGameMsg(Msg):
     '''
     Wrapper for pygame event
     '''
@@ -55,7 +55,7 @@ class PyGameMsg:
         content = {
                     'event': pg_event
                   }
-        super().__init__(content=content)
+        super().__init__(content)
 
 
 class Manager:
@@ -78,7 +78,7 @@ class Manager:
         Класс ADD_OBJ сообщения для менеджера
         '''
 
-        def __init__(target, sender=None, address=None):
+        def __init__(self, target, sender=None, address=None):
             '''
             Init method for a ADD_OBJ message object
             :param target: link to the object to be added to
@@ -99,6 +99,7 @@ class Manager:
                             дефолтное значение - None(сообщение будет
                             доставленно всем локальным объектам)
             '''
+
             content = {"target": target}
             super().__init__(content, sender, address)
 
@@ -110,7 +111,7 @@ class Manager:
         Класс REMOVE_OBJ сообщения для менеджера
         '''
 
-        def __init__(target, sender=None, address=None):
+        def __init__(self, target, sender=None, address=None):
             '''
             Init method for a REMOVED_OBJ message object
             :param target: link to the object to be removed from
@@ -182,6 +183,38 @@ class BaseEventManager(Manager):
     '''
     Базовый класс обработчик событий
     '''
+    # Messages for event manager
+
+    class TRANS_MSG(Msg):
+        '''
+        Class of TRANS_MSG message for base event manager
+        '''
+        '''
+        Класс TRANS_MSG сообщения для базвого обработчика событий
+        '''
+
+        def __init__(self, sub_msg, sender=None, address=None):
+            '''
+            Init method for a TRANS_MSG message object
+            :param sub_msg: link to the message to be transported
+            :param sender: link to the sender of the message,
+                           default value is None (anonymous message)
+            :param address: link to the addressee of the message,
+                            default value is None (message wil be delivered
+                            to all local objects)
+            '''
+            '''
+            Метод инциалиации TRANS_MSG сообщения
+            :param sub_msg: ссылка на письмо, которое нужно передать
+            :param sender:  ссылка на отправителя сообщения,
+                            дефолтное значение - None(анонимное сообщение)
+            :param address: ссылка на получателя сообщения,
+                            дефолтное значение - None(сообщение будет
+                            доставленно всем локальным объектам)
+            '''
+
+            content = {"sub_msg": sub_msg}
+            super().__init__(content, sender, address)
 
     class Employee:
         '''
@@ -205,8 +238,7 @@ class BaseEventManager(Manager):
 
             self.event_manager = event_manager
 
-            add_msg = Manager.ADD_OBJ(target=self,
-                                      address=self.event_manager)
+            add_msg = Manager.ADD_OBJ(self, address=self.event_manager)
             self.event_manager.post(add_msg)
 
         def call(self, msg):
@@ -250,13 +282,36 @@ class BaseEventManager(Manager):
         '''
 
         for msg in self.msg_queue:
-            if msg.address is self:
-                self.call(msg)
+            self.call(msg)
             for employee in self.employees:
                 employee.call(msg)
 
         for employee in self.employees:
             employee.run()
+
+    def call(self, msg):
+        '''
+        Method that describes base event manager reaction to msg
+        :param msg: message the base event manager will react to
+        '''
+        '''
+        Метод, описывающий реакциию базовго обработчика событий на полученное
+        сообщение
+        :param msg: сообщение, отправленное базовому обработчику событий
+        '''
+
+        super().call(msg)
+        if isinstance(msg, BaseEventManager.TRANS_MSG):
+            if msg.sender is not self:
+                self.post(msg.content["sub_msg"])
+
+                if msg.address is not self:
+                    sub_msg = msg.content["sub_msg"]
+                    address = msg.address
+
+                    new_msg = BaseEventManager.TRANS_MSG(sub_msg, self,
+                                                         address)
+                    self.post(new_msg)
 
     def post(self, msg):
         '''
@@ -268,7 +323,7 @@ class BaseEventManager(Manager):
         :param msg:
         '''
 
-        self.queue.append(msg)
+        self.msg_queue.append(msg)
 
 
 class EventManager(BaseEventManager, BaseEventManager.Employee):
@@ -294,9 +349,14 @@ class EventManager(BaseEventManager, BaseEventManager.Employee):
                               объектом
         '''
 
-        self.clock = Clock(self, event_manager.clock)
         BaseEventManager.__init__(self)
-        BaseEventManager.Employee__init__(self, event_manager)
+        BaseEventManager.Employee.__init__(self, event_manager)
+        self.clock = Clock(self, event_manager.clock)
+
+        if isinstance(self.event_manager, MasterEventManager):
+            self.master_manager = self.event_manager
+        else:
+            self.master_manager = self.event_manager.master_manager
 
     def run(self):
         '''
@@ -331,6 +391,30 @@ class MasterEventManager(BaseEventManager):
     Класс главного обработчика событий
     '''
 
+    # Messages for master event manager
+
+    class QUIT(Msg):
+        '''
+        Class of QUIT message for master event manager
+        '''
+        '''
+        Класс QUIT сообщения для главного обработчика событий
+        '''
+
+        def __init__(self, sender=None):
+            '''
+            Init method for a QUIT message object
+            :param sender: link to the sender of the message,
+                           default value is None (anonymous message)
+            '''
+            '''
+            Метод инциалиации QUIT сообщения
+            :param sender:  ссылка на отправителя сообщения,
+                            дефолтное значение - None(анонимное сообщение)
+            '''
+
+            super().__init__(sender=sender)
+
     def __init__(self, FPS):
         '''
         Init method of a master event manager
@@ -341,9 +425,9 @@ class MasterEventManager(BaseEventManager):
         :param FPS: FPS программы
         '''
 
+        super().__init__()
         self.running = True
         self.clock = MasterClock(self, FPS)
-        super().__init__()
 
     def run(self):
         '''
@@ -356,12 +440,10 @@ class MasterEventManager(BaseEventManager):
 
         for event in pg.event.get():
             msg = PyGameMsg(event)
-            self.call(msg)
-            for employee in self.employee:
-                employee.call(msg)
+            self.post(msg)
+            self.post(MasterEventManager.TRANS_MSG(msg, self))
 
-        for employee in self.employees:
-            employee.run()
+        super().run()
 
         return self.running
 
@@ -376,12 +458,13 @@ class MasterEventManager(BaseEventManager):
         :param msg: сообщение, отправленное главному обработчику событий
         '''
 
+        super().call(msg)
         if isinstance(msg, PyGameMsg):
             if msg.content["event"].type == pg.QUIT:
                 self.running = False
 
-        else:
-            super().call(msg)
+        elif isinstance(msg, MasterEventManager.QUIT):
+            self.running = False
 
 
 class Clock(Manager, EventManager.Employee):
@@ -521,15 +604,15 @@ class MasterClock(Manager, EventManager.Employee):
         self.pg_clock = pg.time.Clock()
         self.current_time = 0
         Manager.__init__(self)
-        EventManager.Employee(self, event_manager)
+        EventManager.Employee.__init__(self, event_manager)
 
     def run(self):
         '''
         Method that describes master clock default behaviour
         '''
 
-        self.dt = self.pg_clocl.tick(self.FPS) / 1000
-        self.current += self.dt
+        self.dt = self.pg_clock.tick(self.FPS) / 1000
+        self.current_time += self.dt
         for employee in self.employees:
             employee.update(self.dt)
 
@@ -559,7 +642,7 @@ class BaseCanvas(Manager, EventManager.Employee):
         Класс SET_GUI сообщения для менеджера
         '''
 
-        def __init__(target, sender=None, address=None):
+        def __init__(self, target, sender=None, address=None):
             '''
             Init method for a SET_GUI message object
             :param target: link to the GUI object
@@ -609,7 +692,8 @@ class BaseCanvas(Manager, EventManager.Employee):
                         рисуемого объекта
 
             '''
-            self.visual_manager
+            self.visual_manager = visual_manager
+            self.pos = pos
             add_msg = Manager.ADD_OBJ(target=self,
                                       address=visual_manager)
             visual_manager.event_manager.post(add_msg)
@@ -716,7 +800,7 @@ class Canvas(BaseCanvas, BaseCanvas.DrawableObj):
         '''
 
         BaseCanvas.__init__(self, event_manager, size, bg_color)
-        BaseCanvas.DrawableObj.__init__(self, visual_manager)
+        BaseCanvas.DrawableObj.__init__(self, visual_manager, pos)
 
     def draw(self):
         '''
@@ -773,7 +857,43 @@ class GUI(EventManager.Employee):
     Класс графического пользовательского интерфейса (ГПИ)
     '''
 
+    class LinkedLabel:
+        '''
+        Class of linked label
+        '''
+        '''
+        Класс связанной строки (GUI.Label)
+        '''
+
+        def __init__(self, label, text_func):
+            '''
+            Init method of linked label
+            :param label: instance of GUI.Label whose text should be
+                          updated automatically
+            :param text_func: function that returns new text value
+                              for the label
+            '''
+            '''
+            Метод инициализации связанной строки
+            :param label: объект типа GUI.Label, чей текст должен
+                          автоматически обнавляться
+            :param text_func: функция, возвращающая новое текстовое
+                              значение строки
+            '''
+            self.label = label
+            self.text_func = text_func
+
+        def update(self):
+            '''
+            Method that updates label text
+            '''
+            '''
+            Метод, обновляющй текст строки
+            '''
+            self.label.set_text(self.text_func())
+
     Button = pg_gui.elements.ui_button.UIButton
+    Label = pg_gui.elements.ui_label.UILabel
     button_events = (
                      pg_gui.UI_BUTTON_PRESSED,
                      pg_gui.UI_BUTTON_DOUBLE_CLICKED,
@@ -781,7 +901,7 @@ class GUI(EventManager.Employee):
                      pg_gui.UI_BUTTON_ON_UNHOVERED,
                     )
 
-    def __init__(self, event_manager, visual_manager):
+    def __init__(self, event_manager, visual_manager, theme_path=None):
         '''
         Init method of the GUI
         :param event_manager: event manager that will manage this
@@ -806,8 +926,14 @@ class GUI(EventManager.Employee):
         self.clock = Clock(self.event_manager, self.event_manager.clock)
         self.clock.play()
 
-        self.ui_manager = pg_gui.UI_Manager(self.visual_manager.size)
+        if theme_path is None:
+            self.ui_manager = pg_gui.UIManager(self.visual_manager.size)
+        else:
+            self.ui_manager = pg_gui.UIManager(self.visual_manager.size,
+                                               theme_path)
         self.buttons = dict()
+        self.labels = dict()
+        self.linked_labels = dict()
 
     def draw(self):
         '''
@@ -826,7 +952,9 @@ class GUI(EventManager.Employee):
         Метод, описывающий дефолтное поведение ГПИ
         '''
 
-        self.event_manager.update(self.clock.get_tick())
+        for name, lin_label in self.linked_labels:
+            lin_label.update()
+        self.ui_manager.update(self.clock.get_tick())
 
     def call(self, msg):
         '''
@@ -841,10 +969,10 @@ class GUI(EventManager.Employee):
 
         if isinstance(msg, PyGameMsg):
             event = msg.content['event']
-            self.ui_manager.proccess_events(event)
+            self.ui_manager.process_events(event)
             if event.type == pg.USEREVENT:
                 if event.user_type in GUI.button_events:
-                    self.button_hadling(event)
+                    self.button_handling(event)
 
     def button_handling(self, event):
         '''
