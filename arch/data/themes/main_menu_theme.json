@@ -3,7 +3,7 @@
 	{
 		"colours":
 		{
-             	 	"normal_text": "#c5cbd8",
+             	 	"normal_text": "#fdf425",
 			"dark_bg": "#00000000"
 		},
 		"font":
@@ -15,6 +15,13 @@
 	},
 	"button":
 	{
+		"colours":
+		{
+             	 	"normal_text": "#fdf425",
+			"normal_bg": "#000000",
+	            	"hovered_text": "#fdf425",
+			"hovered_bg": "#2c2c2c"
+	},
 		"font":
 		{
 			"name": "pixeboy",

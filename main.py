@@ -16,7 +16,7 @@ pg.init()
 
 def main():
     event_manager = arch.MasterEventManager(FPS)
-    canvas = arch.MasterCanvas(event_manager, WIN_SIZE)
+    canvas = arch.MasterCanvas(event_manager, WIN_SIZE, (0, 0, 0))
     main_menu.MainMenu(event_manager, canvas)
 
     while event_manager.run():

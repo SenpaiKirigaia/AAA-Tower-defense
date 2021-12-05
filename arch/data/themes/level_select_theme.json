@@ -1,0 +1,60 @@
+{
+	"title":
+	{
+		"colours":
+		{
+             	 	"normal_text": "#fdf425",
+			"dark_bg": "#00000000"
+		},
+		"font":
+		{
+			"name": "pixeboy",
+			"size": "70",
+			"regular_path": "arch/data/fonts/Pixeboy.ttf"
+		}
+	},
+	"lvl-1":
+	{
+		"images":
+		{
+			"normal_image":
+			{
+				"path": "arch/data/images/lvl_1_prev.png"
+			},
+			"hovered_image":
+			{
+				"path": "arch/data/images/lvl_1_prev_hov.png"
+			}
+		}
+		
+	},
+	"lvl-2":
+	{
+		"images":
+		{
+			"normal_image":
+			{
+				"path": "arch/data/images/lvl_0_prev.png"
+			},
+			"hovered_image":
+			{
+				"path": "arch/data/images/lvl_0_prev_hov.png"
+			}
+		}
+		
+	},
+	"return":
+	{
+		"images":
+		{
+			"normal_image":
+			{
+				"path": "arch/data/images/return.png"
+			},
+			"hovered_image":
+			{
+				"path": "arch/data/images/return_hov.png"
+			}		}
+		
+	}
+}

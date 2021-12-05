@@ -238,7 +238,8 @@ class BaseEventManager(Manager):
 
             self.event_manager = event_manager
 
-            add_msg = Manager.ADD_OBJ(self, address=self.event_manager)
+            add_msg = Manager.ADD_OBJ(self, address=self.event_manager,
+                                      sender=self)
             self.event_manager.post(add_msg)
 
         def call(self, msg):
@@ -281,7 +282,8 @@ class BaseEventManager(Manager):
         событий
         '''
 
-        for msg in self.msg_queue:
+        while self.msg_queue:
+            msg = self.msg_queue.pop(0)
             self.call(msg)
             for employee in self.employees:
                 employee.call(msg)
@@ -636,7 +638,7 @@ class BaseCanvas(Manager, EventManager.Employee):
 
     class SET_GUI(Msg):
         '''
-        Class of ADD_OBJ message for Manager
+        Class of SET_GUI message for Manager
         '''
         '''
         Класс SET_GUI сообщения для менеджера
@@ -801,6 +803,10 @@ class Canvas(BaseCanvas, BaseCanvas.DrawableObj):
 
         BaseCanvas.__init__(self, event_manager, size, bg_color)
         BaseCanvas.DrawableObj.__init__(self, visual_manager, pos)
+        if isinstance(self.visual_manager, MasterCanvas):
+            self.master_canvas = self.visual_manager
+        else:
+            self.master_canvas = self.visual_manager.master_canvas
 
     def draw(self):
         '''
