@@ -908,6 +908,8 @@ class GUI(EventManager.Employee):
                               GUI
         :param visual_manager: visual manager that will manage this
                                GUI
+        :param theme_path: path to theme file of gui, default value
+                           is None for the standard theme
         '''
         '''
         Метод иницализации ГПИ
@@ -915,6 +917,9 @@ class GUI(EventManager.Employee):
                               ГПИ
         :param visual_manager: холст, на котором будет отрисован
                                данный ГПИ
+        :param theme_path: путь к фалу с темой для ГПИ,
+                           дефолтное значение - None соответствует
+                           стандарнтной теме
         '''
 
         EventManager.Employee.__init__(self, event_manager)

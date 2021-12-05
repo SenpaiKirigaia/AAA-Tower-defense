@@ -1,0 +1,25 @@
+{
+	"title":
+	{
+		"colours":
+		{
+             	 	"normal_text": "#c5cbd8",
+			"dark_bg": "#00000000"
+		},
+		"font":
+		{
+			"name": "pixeboy",
+			"size": "70",
+			"regular_path": "arch/data/fonts/Pixeboy.ttf"
+		}
+	},
+	"button":
+	{
+		"font":
+		{
+			"name": "pixeboy",
+			"size": "20",
+			"regular_path": "arch/data/fonts/Pixeboy.ttf"
+		}
+	}
+}
