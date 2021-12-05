@@ -13,47 +13,47 @@
 			"regular_path": "arch/data/fonts/Pixeboy.ttf"
 		}
 	},
-	"lvl-1":
+	"lvl-1-btn":
 	{
 		"images":
 		{
 			"normal_image":
 			{
-				"path": "arch/data/images/lvl_1_prev.png"
+				"path": "arch/data/images/lvl-1-prev-btn.png"
 			},
 			"hovered_image":
 			{
-				"path": "arch/data/images/lvl_1_prev_hov.png"
+				"path": "arch/data/images/lvl-1-prev-btn-hov.png"
 			}
 		}
 		
 	},
-	"lvl-2":
+	"lvl-2-btn":
 	{
 		"images":
 		{
 			"normal_image":
 			{
-				"path": "arch/data/images/lvl_0_prev.png"
+				"path": "arch/data/images/lvl-0-prev-btn.png"
 			},
 			"hovered_image":
 			{
-				"path": "arch/data/images/lvl_0_prev_hov.png"
+				"path": "arch/data/images/lvl-1-prev-btn-hov.png"
 			}
 		}
 		
 	},
-	"return":
+	"ret-btn":
 	{
 		"images":
 		{
 			"normal_image":
 			{
-				"path": "arch/data/images/return.png"
+				"path": "arch/data/images/ret-btn.png"
 			},
 			"hovered_image":
 			{
-				"path": "arch/data/images/return_hov.png"
+				"path": "arch/data/images/ret-btn-hov.png"
 			}		}
 		
 	}
