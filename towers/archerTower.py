@@ -29,6 +29,7 @@ class ArcherTowerLong(Tower):
         self.tower_imgs = tower_imgs1[:]
         self.archer_imgs = archer_imgs1[:]
         self.archer_count = 0
+        self.archer_fire_time = 240
         self.range = 200
         self.original_range = self.range
         self.inRange = False
@@ -93,7 +94,7 @@ class ArcherTowerLong(Tower):
         enemy_closest = enemy_closest[::-1]
         if len(enemy_closest) > 0:
             first_enemy = enemy_closest[0]
-            if self.archer_count == 50:
+            if self.archer_count == self.archer_fire_time:
                 first_enemy.hit(self.damage)
                 if first_enemy.alive:
                     money = first_enemy.money * 2
@@ -132,6 +133,7 @@ class ArcherTowerShort(ArcherTowerLong):
         self.tower_imgs = tower_imgs[:]
         self.archer_imgs = archer_imgs[:]
         self.archer_count = 0
+        self.archer_fire_time = 150
         self.range = 120
         self.original_range = self.range
         self.inRange = False
