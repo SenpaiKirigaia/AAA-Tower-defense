@@ -1,0 +1,103 @@
+{
+	"shop-pnl":
+	{
+		"images":
+		{
+			"background_image":
+			{
+				"path": "arch/data/images/shop-pnl.png"
+			}
+		}
+	},
+	"time-pnl":
+	{
+		"images":
+		{
+			"background_image":
+			{
+				"path": "arch/data/images/time-pnl.png"
+			}
+		}
+	},
+	"wave-pnl":
+	{
+		"images":
+		{
+			"background_image":
+			{
+				"path": "arch/data/images/wave-pnl.png"
+			}
+		}
+	},
+	"pause-btn":
+	{
+		"images":
+		{
+			"normal_image":
+			{
+				"path": "arch/data/images/pause-btn.png"
+			},
+			"hovered_image":
+			{
+				"path": "arch/data/images/pause-btn-hov.png"
+			}		
+		}
+		
+	},
+	"buy-1-btn":
+	{
+		"images":
+		{
+			"normal_image":
+			{
+				"path": "arch/data/images/buy-1-btn.png"
+			},
+			"hovered_image":
+			{
+				"path": "arch/data/images/buy-1-btn-hov.png"
+			}		
+		}		
+	},
+	"time-lbl":
+	{
+		"colours":
+		{
+             	 	"normal_text": "#000000",
+			"dark_bg": "#00000000"
+		},
+		"font":
+		{
+			"name": "pixeboy",
+			"size": "38",
+			"regular_path": "arch/data/fonts/Pixeboy.ttf"
+		}
+	},
+	"wave-lbl":
+	{
+		"colours":
+		{
+             	 	"normal_text": "#000000",
+			"dark_bg": "#00000000"
+		},
+		"font":
+		{
+			"name": "pixeboy",
+			"size": "38",
+			"regular_path": "arch/data/fonts/Pixeboy.ttf"
+		}
+	},
+	"money-lbl":
+	{
+		"colours":
+		{
+             	 	"normal_text": "#ffffff",
+			"dark_bg": "#00000000"
+		},
+		"font":
+		{
+			"name": "pixeboy",
+			"size": "40",
+			"regular_path": "arch/data/fonts/Pixeboy.ttf"
+		}
+	}
+}

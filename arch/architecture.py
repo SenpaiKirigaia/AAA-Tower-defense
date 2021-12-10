@@ -354,6 +354,7 @@ class EventManager(BaseEventManager, BaseEventManager.Employee):
         BaseEventManager.__init__(self)
         BaseEventManager.Employee.__init__(self, event_manager)
         self.clock = Clock(self, event_manager.clock)
+        self.clock.play()
 
         if isinstance(self.event_manager, MasterEventManager):
             self.master_manager = self.event_manager
@@ -900,6 +901,7 @@ class GUI(EventManager.Employee):
 
     Button = pg_gui.elements.ui_button.UIButton
     Label = pg_gui.elements.ui_label.UILabel
+    Panel = pg_gui.elements.ui_panel.UIPanel
     button_events = (
                      pg_gui.UI_BUTTON_PRESSED,
                      pg_gui.UI_BUTTON_DOUBLE_CLICKED,
@@ -944,6 +946,7 @@ class GUI(EventManager.Employee):
                                                theme_path)
         self.buttons = dict()
         self.labels = dict()
+        self.panels = dict()
         self.linked_labels = dict()
 
     def draw(self):
@@ -963,7 +966,7 @@ class GUI(EventManager.Employee):
         Метод, описывающий дефолтное поведение ГПИ
         '''
 
-        for name, lin_label in self.linked_labels:
+        for lin_label in self.linked_labels.values():
             lin_label.update()
         self.ui_manager.update(self.clock.get_tick())
 

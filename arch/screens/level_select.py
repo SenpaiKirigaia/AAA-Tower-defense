@@ -7,6 +7,7 @@ import architecture as arch
 
 sys.path.append("arch/screens/")
 import main_menu
+import game_screen
 
 
 class LevelSelectGUI(arch.GUI):
@@ -41,19 +42,19 @@ class LevelSelectGUI(arch.GUI):
                                     relative_rect=pg.Rect(75, 160, 226, 218),
                                     text="",
                                     manager=self.ui_manager,
-                                    object_id='lvl-1')
+                                    object_id='lvl-1-btn')
 
         lvl_2_btn = arch.GUI.Button(
                                     relative_rect=pg.Rect(385, 160, 226, 218),
                                     text="",
                                     manager=self.ui_manager,
-                                    object_id='lvl-2')
+                                    object_id='lvl-2-btn')
 
         ret_btn = arch.GUI.Button(
                                   relative_rect=pg.Rect(695, 445, 226, 218),
                                   text="",
                                   manager=self.ui_manager,
-                                  object_id='return')
+                                  object_id='ret-btn')
 
         title_lbl = arch.GUI.Label(
                                    relative_rect=pg.Rect(200, 50, 600, 100),
@@ -92,6 +93,23 @@ class LevelSelectGUI(arch.GUI):
                 rm_3 = arch.Manager.REMOVE_OBJ(self.event_manager.clock,
                                                address=master_manager.clock)
                 main_menu.MainMenu(master_manager, master_canvas)
+                master_manager.post(rm_1)
+                master_manager.post(rm_2)
+                master_manager.post(rm_3)
+
+            elif event.ui_element is self.buttons["lvl-1-btn"]:
+                master_manager = self.event_manager.master_manager
+                master_canvas = self.visual_manager.master_canvas
+
+                rm_1 = arch.Manager.REMOVE_OBJ(self.visual_manager,
+                                               address=master_canvas)
+
+                rm_2 = arch.Manager.REMOVE_OBJ(self.event_manager,
+                                               address=master_manager)
+
+                rm_3 = arch.Manager.REMOVE_OBJ(self.event_manager.clock,
+                                               address=master_manager.clock)
+                game_screen.GameScreen(master_manager, master_canvas)
                 master_manager.post(rm_1)
                 master_manager.post(rm_2)
                 master_manager.post(rm_3)
