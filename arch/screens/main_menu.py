@@ -38,12 +38,12 @@ class MainMenuGUI(arch.GUI):
         self.size = visual_manager.size
 
         start_btn = arch.GUI.Button(
-                                    relative_rect=pg.Rect(400, 500, 200, 50),
+                                    relative_rect=pg.Rect(350, 450, 300, 75),
                                     text="START",
                                     manager=self.ui_manager)
 
         quit_btn = arch.GUI.Button(
-                                   relative_rect=pg.Rect(400, 600, 200, 50),
+                                   relative_rect=pg.Rect(350, 550, 300, 75),
                                    text="QUIT",
                                    manager=self.ui_manager)
 

@@ -9,7 +9,7 @@
 		"font":
 		{
 			"name": "pixeboy",
-			"size": "75",
+			"size": "150",
 			"regular_path": "arch/data/fonts/Pixeboy.ttf"
 		}
 	},

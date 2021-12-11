@@ -58,6 +58,20 @@
 			}		
 		}		
 	},
+	"sell-btn":
+	{
+		"images":
+		{
+			"normal_image":
+			{
+				"path": "arch/data/images/sell-btn.png"
+			},
+			"hovered_image":
+			{
+				"path": "arch/data/images/sell-btn-hov.png"
+			}		
+		}		
+	},
 	"time-lbl":
 	{
 		"colours":

@@ -6,6 +6,7 @@ sys.path.append("arch")
 import architecture as arch
 
 sys.path.append("arch/screens/")
+import pause_menu
 
 
 class GameScreenGUI(arch.GUI):
@@ -16,25 +17,31 @@ class GameScreenGUI(arch.GUI):
     Класс ГПИ игрового экрана
     '''
 
-    def __init__(self, event_manager, visual_manager):
+    def __init__(self, game_screen):
         '''
-        Init method of the level select menu GUI
-        :param event_manager: event manager that will manage this
-                              GUI
-        :param visual_manager: visual manager that will manage this
-                               GUI
+        Init method of the game screen GUI
+        :param game_screen: link to the current game_screen
         '''
         '''
-        Метод инициализации ГПИ меню выбора уровня
-        :param event_manager: менеджер событий, управляющий данным
-                              ГПИ
-        :param visual_manager: холст, на котором будет отрисован
-                               данный ГПИ
+        Метод инициализации ГПИ игрового экрана
+        :param game_screen: ссылка на текущий игровой экран
         '''
 
-        super().__init__(event_manager, visual_manager,
+        super().__init__(game_screen.event_manager, game_screen.canvas,
                          "./arch/data/themes/game_screen_theme.json")
-        self.size = visual_manager.size
+        self.size = self.visual_manager.size
+        self.game_screen = game_screen
+        self.panel_init()
+        self.button_init()
+        self.label_init()
+
+    def panel_init(self):
+        '''
+        Init method of all game screen GUI panels
+        '''
+        '''
+        Метод инициализации всех панелей ГПИ игрового экрана
+        '''
 
         shop_pnl = arch.GUI.Panel(
                                   relative_rect=pg.Rect(20, 110, 243, 533),
@@ -57,6 +64,18 @@ class GameScreenGUI(arch.GUI):
                                   object_id="wave-pnl"
                                  )
 
+        self.panels.update({"shop-pnl": shop_pnl})
+        self.panels.update({"time-pnl": time_pnl})
+        self.panels.update({"wave-pnl": wave_pnl})
+
+    def button_init(self):
+        '''
+        Init method of all game screen GUI buttons
+        '''
+        '''
+        Метод инициализации всех кнопок ГПИ игрового экрана
+        '''
+
         pause_btn = arch.GUI.Button(
                                     relative_rect=pg.Rect(20, 660, 241, 60),
                                     text="",
@@ -64,19 +83,45 @@ class GameScreenGUI(arch.GUI):
                                     object_id="pause-btn"
                                    )
 
+        shop_container = self.panels["shop-pnl"].get_container()
         buy_1_btn = arch.GUI.Button(
                                     relative_rect=pg.Rect(9, 50, 104, 130),
                                     text="",
                                     manager=self.ui_manager,
-                                    container=shop_pnl.get_container(),
+                                    container=shop_container,
                                     object_id="buy-1-btn"
                                    )
+
+        sell_btn = arch.GUI.Button(
+                                   relative_rect=pg.Rect(128, 190, 104, 130),
+                                   text="",
+                                   manager=self.ui_manager,
+                                   container=shop_container,
+                                   object_id="sell-btn"
+                                  )
+
+        self.buttons.update({"pause-btn": pause_btn})
+        self.buttons.update({"buy-1-btn": buy_1_btn})
+        self.buttons.update({"sell-btn": sell_btn})
+
+    def label_init(self):
+        '''
+        Init method of all game screen GUI labels (including linked labels)
+        '''
+        '''
+        Метод инициализации все надписей ГПИ игрового экрана
+        (в том числе связанных)
+        '''
+
+        time_container = self.panels["time-pnl"].get_container()
+        wave_container = self.panels["wave-pnl"].get_container()
+        shop_container = self.panels["shop-pnl"].get_container()
 
         time_lbl = arch.GUI.Label(
                                   relative_rect=pg.Rect(10, 40, 90, 25),
                                   text="",
                                   manager=self.ui_manager,
-                                  container=time_pnl.get_container(),
+                                  container=time_container,
                                   object_id="time-lbl"
                                  )
 
@@ -94,7 +139,7 @@ class GameScreenGUI(arch.GUI):
                                   relative_rect=pg.Rect(120, 15, 110, 25),
                                   text="",
                                   manager=self.ui_manager,
-                                  container=shop_pnl.get_container(),
+                                  container=shop_container,
                                   object_id="money-lbl"
                                  )
 
@@ -110,7 +155,7 @@ class GameScreenGUI(arch.GUI):
                                   relative_rect=pg.Rect(10, 40, 90, 25),
                                   text="",
                                   manager=self.ui_manager,
-                                  container=wave_pnl.get_container(),
+                                  container=wave_container,
                                   object_id="wave-lbl"
                                  )
 
@@ -122,11 +167,6 @@ class GameScreenGUI(arch.GUI):
         wave_update = decor(lambda: (0, 0))
         wave_linlbl = arch.GUI.LinkedLabel(wave_lbl, wave_update)
 
-        self.panels.update({"shop-pnl": shop_pnl})
-        self.panels.update({"time-pnl": time_pnl})
-        self.panels.update({"wave-pnl": wave_pnl})
-        self.buttons.update({"pause-btn": pause_btn})
-        self.buttons.update({"buy-1-btn": buy_1_btn})
         self.linked_labels.update({"time-lbl": time_linlbl})
         self.linked_labels.update({"money-lbl": money_linlbl})
         self.linked_labels.update({"wave-lbl": wave_linlbl})
@@ -156,6 +196,8 @@ class GameScreenGUI(arch.GUI):
 
                 rm_3 = arch.Manager.REMOVE_OBJ(self.event_manager.clock,
                                                address=master_manager.clock)
+                pause_menu.PauseMenu(master_manager, master_canvas,
+                                     self.game_screen)
                 master_manager.post(rm_1)
                 master_manager.post(rm_2)
                 master_manager.post(rm_3)
@@ -184,4 +226,4 @@ class GameScreen:
         self.event_manager = arch.EventManager(ms_event_manager)
         self.canvas = arch.Canvas(self.event_manager, ms_visual_manager,
                                   ms_visual_manager.size, (0, 0), (0, 0, 0))
-        self.gui = GameScreenGUI(self.event_manager, self.canvas)
+        self.gui = GameScreenGUI(self)
