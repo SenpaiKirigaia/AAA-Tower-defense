@@ -38,6 +38,23 @@ class LevelSelectGUI(arch.GUI):
                          "./arch/data/themes/level_select_theme.json")
         self.size = visual_manager.size
 
+        title_lbl = arch.GUI.Label(
+                                   relative_rect=pg.Rect(200, 50, 600, 100),
+                                   text="AAA TOWER DEFFENSE",
+                                   manager=self.ui_manager,
+                                   object_id="title")
+
+        self.labels.update({"title": title_lbl})
+        self.button_init()
+
+    def button_init(self):
+        '''
+        Init method of all level select menu GUI buttons
+        '''
+        '''
+        Метод инициализации всех кнопок ГПИ меню выбора уровня
+        '''
+
         lvl_1_btn = arch.GUI.Button(
                                     relative_rect=pg.Rect(75, 160, 226, 218),
                                     text="",
@@ -50,22 +67,35 @@ class LevelSelectGUI(arch.GUI):
                                     manager=self.ui_manager,
                                     object_id='lvl-2-btn')
 
+        lvl_3_btn = arch.GUI.Button(
+                                    relative_rect=pg.Rect(695, 160, 226, 218),
+                                    text="",
+                                    manager=self.ui_manager,
+                                    object_id='lvl-3-btn')
+
+        lvl_4_btn = arch.GUI.Button(
+                                    relative_rect=pg.Rect(75, 445, 226, 218),
+                                    text="",
+                                    manager=self.ui_manager,
+                                    object_id='lvl-4-btn')
+
+        lvl_5_btn = arch.GUI.Button(
+                                    relative_rect=pg.Rect(385, 445, 226, 218),
+                                    text="",
+                                    manager=self.ui_manager,
+                                    object_id='lvl-5-btn')
+
         ret_btn = arch.GUI.Button(
                                   relative_rect=pg.Rect(695, 445, 226, 218),
                                   text="",
                                   manager=self.ui_manager,
                                   object_id='ret-btn')
-
-        title_lbl = arch.GUI.Label(
-                                   relative_rect=pg.Rect(200, 50, 600, 100),
-                                   text="AAA TOWER DEFFENSE",
-                                   manager=self.ui_manager,
-                                   object_id="title")
-
         self.buttons.update({"lvl-1-btn": lvl_1_btn})
         self.buttons.update({"lvl-2-btn": lvl_2_btn})
+        self.buttons.update({"lvl-3-btn": lvl_3_btn})
+        self.buttons.update({"lvl-4-btn": lvl_4_btn})
+        self.buttons.update({"lvl-5-btn": lvl_5_btn})
         self.buttons.update({"ret-btn": ret_btn})
-        self.labels.update({"title": title_lbl})
 
     def button_handling(self, event):
         '''

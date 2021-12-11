@@ -43,6 +43,51 @@
 		}
 		
 	},
+	"lvl-3-btn":
+	{
+		"images":
+		{
+			"normal_image":
+			{
+				"path": "arch/data/images/lvl-0-prev-btn.png"
+			},
+			"hovered_image":
+			{
+				"path": "arch/data/images/lvl-0-prev-btn-hov.png"
+			}
+		}
+		
+	},
+	"lvl-4-btn":
+	{
+		"images":
+		{
+			"normal_image":
+			{
+				"path": "arch/data/images/lvl-0-prev-btn.png"
+			},
+			"hovered_image":
+			{
+				"path": "arch/data/images/lvl-0-prev-btn-hov.png"
+			}
+		}
+		
+	},
+	"lvl-5-btn":
+	{
+		"images":
+		{
+			"normal_image":
+			{
+				"path": "arch/data/images/lvl-0-prev-btn.png"
+			},
+			"hovered_image":
+			{
+				"path": "arch/data/images/lvl-0-prev-btn-hov.png"
+			}
+		}
+		
+	},
 	"ret-btn":
 	{
 		"images":

@@ -58,6 +58,34 @@
 			}		
 		}		
 	},
+	"buy-2-btn":
+	{
+		"images":
+		{
+			"normal_image":
+			{
+				"path": "arch/data/images/buy-2-btn.png"
+			},
+			"hovered_image":
+			{
+				"path": "arch/data/images/buy-2-btn-hov.png"
+			}		
+		}		
+	},
+	"buy-3-btn":
+	{
+		"images":
+		{
+			"normal_image":
+			{
+				"path": "arch/data/images/buy-3-btn.png"
+			},
+			"hovered_image":
+			{
+				"path": "arch/data/images/buy-3-btn-hov.png"
+			}		
+		}		
+	},
 	"sell-btn":
 	{
 		"images":

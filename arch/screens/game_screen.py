@@ -84,12 +84,29 @@ class GameScreenGUI(arch.GUI):
                                    )
 
         shop_container = self.panels["shop-pnl"].get_container()
+
         buy_1_btn = arch.GUI.Button(
                                     relative_rect=pg.Rect(9, 50, 104, 130),
                                     text="",
                                     manager=self.ui_manager,
                                     container=shop_container,
                                     object_id="buy-1-btn"
+                                   )
+
+        buy_2_btn = arch.GUI.Button(
+                                    relative_rect=pg.Rect(128, 50, 104, 130),
+                                    text="",
+                                    manager=self.ui_manager,
+                                    container=shop_container,
+                                    object_id="buy-2-btn"
+                                   )
+
+        buy_3_btn = arch.GUI.Button(
+                                    relative_rect=pg.Rect(9, 190, 104, 130),
+                                    text="",
+                                    manager=self.ui_manager,
+                                    container=shop_container,
+                                    object_id="buy-3-btn"
                                    )
 
         sell_btn = arch.GUI.Button(
@@ -102,6 +119,8 @@ class GameScreenGUI(arch.GUI):
 
         self.buttons.update({"pause-btn": pause_btn})
         self.buttons.update({"buy-1-btn": buy_1_btn})
+        self.buttons.update({"buy-2-btn": buy_2_btn})
+        self.buttons.update({"buy-3-btn": buy_3_btn})
         self.buttons.update({"sell-btn": sell_btn})
 
     def label_init(self):
