@@ -1,15 +1,12 @@
 import pygame_gui as pg_gui
 import pygame as pg
-import sys
-
-sys.path.append("arch/")
-import architecture as arch
-
-sys.path.append("arch/screens/")
-import level_select
+import arch.base_arch as base_arch
+import arch.vis_arch as vis_arch
+import arch.gui as gui
+import arch.screens.level_select as level_select
 
 
-class MainMenuGUI(arch.GUI):
+class MainMenuGUI(gui.GUI):
     '''
     Class of main menu GUI
     '''
@@ -37,17 +34,17 @@ class MainMenuGUI(arch.GUI):
                          "./arch/data/themes/main_menu_theme.json")
         self.size = visual_manager.size
 
-        start_btn = arch.GUI.Button(
+        start_btn = gui.GUI.Button(
                                     relative_rect=pg.Rect(350, 450, 300, 75),
                                     text="START",
                                     manager=self.ui_manager)
 
-        quit_btn = arch.GUI.Button(
+        quit_btn = gui.GUI.Button(
                                    relative_rect=pg.Rect(350, 550, 300, 75),
                                    text="QUIT",
                                    manager=self.ui_manager)
 
-        title_lbl = arch.GUI.Label(
+        title_lbl = gui.GUI.Label(
                                    relative_rect=pg.Rect(200, 200, 600, 100),
                                    text="AAA TOWER DEFFENSE",
                                    manager=self.ui_manager,
@@ -71,21 +68,22 @@ class MainMenuGUI(arch.GUI):
 
         if event.user_type == pg_gui.UI_BUTTON_PRESSED:
             if event.ui_element is self.buttons['quit-btn']:
-                quit_msg = arch.MasterEventManager.QUIT()
+                quit_msg = base_arch.MasterEventManager.QUIT()
                 self.event_manager.master_manager.post(quit_msg)
 
             elif event.ui_element is self.buttons['start-btn']:
                 master_manager = self.event_manager.master_manager
                 master_canvas = self.visual_manager.master_canvas
+                master_clock = master_manager.clock
 
-                rm_1 = arch.Manager.REMOVE_OBJ(self.visual_manager,
-                                               address=master_canvas)
+                rm_1 = base_arch.Manager.REMOVE_OBJ(self.visual_manager,
+                                                    address=master_canvas)
 
-                rm_2 = arch.Manager.REMOVE_OBJ(self.event_manager,
-                                               address=master_manager)
+                rm_2 = base_arch.Manager.REMOVE_OBJ(self.event_manager,
+                                                    address=master_manager)
 
-                rm_3 = arch.Manager.REMOVE_OBJ(self.event_manager.clock,
-                                               address=master_manager.clock)
+                rm_3 = base_arch.Manager.REMOVE_OBJ(self.event_manager.clock,
+                                                    address=master_clock)
                 level_select.LevelSelect(master_manager, master_canvas)
                 master_manager.post(rm_1)
                 master_manager.post(rm_2)
@@ -112,7 +110,8 @@ class MainMenu:
         :param ms_visual_manager: ссылка на главный холст
          '''
 
-        self.event_manager = arch.EventManager(ms_event_manager)
-        self.canvas = arch.Canvas(self.event_manager, ms_visual_manager,
-                                  ms_visual_manager.size, (0, 0), (0, 0, 0))
+        self.event_manager = base_arch.EventManager(ms_event_manager)
+        self.canvas = vis_arch.Canvas(self.event_manager, ms_visual_manager,
+                                      ms_visual_manager.size, (0, 0),
+                                      (0, 0, 0))
         self.gui = MainMenuGUI(self.event_manager, self.canvas)

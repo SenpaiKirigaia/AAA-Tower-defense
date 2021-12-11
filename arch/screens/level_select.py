@@ -1,16 +1,13 @@
 import pygame_gui as pg_gui
 import pygame as pg
-import sys
-
-sys.path.append("arch")
-import architecture as arch
-
-sys.path.append("arch/screens/")
-import main_menu
-import game_screen
+import arch.base_arch as base_arch
+import arch.vis_arch as vis_arch
+import arch.gui as gui
+import arch.screens.main_menu as main_menu
+import arch.screens.game_screen as game_screen
 
 
-class LevelSelectGUI(arch.GUI):
+class LevelSelectGUI(gui.GUI):
     '''
     Class of level select menu GUI
     '''
@@ -38,11 +35,11 @@ class LevelSelectGUI(arch.GUI):
                          "./arch/data/themes/level_select_theme.json")
         self.size = visual_manager.size
 
-        title_lbl = arch.GUI.Label(
-                                   relative_rect=pg.Rect(200, 50, 600, 100),
-                                   text="AAA TOWER DEFFENSE",
-                                   manager=self.ui_manager,
-                                   object_id="title")
+        title_lbl = gui.GUI.Label(
+                                  relative_rect=pg.Rect(200, 50, 600, 100),
+                                  text="AAA TOWER DEFFENSE",
+                                  manager=self.ui_manager,
+                                  object_id="title")
 
         self.labels.update({"title": title_lbl})
         self.button_init()
@@ -55,37 +52,37 @@ class LevelSelectGUI(arch.GUI):
         Метод инициализации всех кнопок ГПИ меню выбора уровня
         '''
 
-        lvl_1_btn = arch.GUI.Button(
+        lvl_1_btn = gui.GUI.Button(
                                     relative_rect=pg.Rect(75, 160, 226, 218),
                                     text="",
                                     manager=self.ui_manager,
                                     object_id='lvl-1-btn')
 
-        lvl_2_btn = arch.GUI.Button(
+        lvl_2_btn = gui.GUI.Button(
                                     relative_rect=pg.Rect(385, 160, 226, 218),
                                     text="",
                                     manager=self.ui_manager,
                                     object_id='lvl-2-btn')
 
-        lvl_3_btn = arch.GUI.Button(
+        lvl_3_btn = gui.GUI.Button(
                                     relative_rect=pg.Rect(695, 160, 226, 218),
                                     text="",
                                     manager=self.ui_manager,
                                     object_id='lvl-3-btn')
 
-        lvl_4_btn = arch.GUI.Button(
+        lvl_4_btn = gui.GUI.Button(
                                     relative_rect=pg.Rect(75, 445, 226, 218),
                                     text="",
                                     manager=self.ui_manager,
                                     object_id='lvl-4-btn')
 
-        lvl_5_btn = arch.GUI.Button(
+        lvl_5_btn = gui.GUI.Button(
                                     relative_rect=pg.Rect(385, 445, 226, 218),
                                     text="",
                                     manager=self.ui_manager,
                                     object_id='lvl-5-btn')
 
-        ret_btn = arch.GUI.Button(
+        ret_btn = gui.GUI.Button(
                                   relative_rect=pg.Rect(695, 445, 226, 218),
                                   text="",
                                   manager=self.ui_manager,
@@ -113,15 +110,16 @@ class LevelSelectGUI(arch.GUI):
             if event.ui_element is self.buttons["ret-btn"]:
                 master_manager = self.event_manager.master_manager
                 master_canvas = self.visual_manager.master_canvas
+                master_clock = master_manager.clock
 
-                rm_1 = arch.Manager.REMOVE_OBJ(self.visual_manager,
-                                               address=master_canvas)
+                rm_1 = base_arch.Manager.REMOVE_OBJ(self.visual_manager,
+                                                    address=master_canvas)
 
-                rm_2 = arch.Manager.REMOVE_OBJ(self.event_manager,
-                                               address=master_manager)
+                rm_2 = base_arch.Manager.REMOVE_OBJ(self.event_manager,
+                                                    address=master_manager)
 
-                rm_3 = arch.Manager.REMOVE_OBJ(self.event_manager.clock,
-                                               address=master_manager.clock)
+                rm_3 = base_arch.Manager.REMOVE_OBJ(self.event_manager.clock,
+                                                    address=master_clock)
                 main_menu.MainMenu(master_manager, master_canvas)
                 master_manager.post(rm_1)
                 master_manager.post(rm_2)
@@ -130,15 +128,16 @@ class LevelSelectGUI(arch.GUI):
             elif event.ui_element is self.buttons["lvl-1-btn"]:
                 master_manager = self.event_manager.master_manager
                 master_canvas = self.visual_manager.master_canvas
+                master_clock = master_manager.clock
 
-                rm_1 = arch.Manager.REMOVE_OBJ(self.visual_manager,
-                                               address=master_canvas)
+                rm_1 = base_arch.Manager.REMOVE_OBJ(self.visual_manager,
+                                                    address=master_canvas)
 
-                rm_2 = arch.Manager.REMOVE_OBJ(self.event_manager,
-                                               address=master_manager)
+                rm_2 = base_arch.Manager.REMOVE_OBJ(self.event_manager,
+                                                    address=master_manager)
 
-                rm_3 = arch.Manager.REMOVE_OBJ(self.event_manager.clock,
-                                               address=master_manager.clock)
+                rm_3 = base_arch.Manager.REMOVE_OBJ(self.event_manager.clock,
+                                                    address=master_clock)
                 game_screen.GameScreen(master_manager, master_canvas)
                 master_manager.post(rm_1)
                 master_manager.post(rm_2)
@@ -165,7 +164,8 @@ class LevelSelect:
         :param ms_visual_manager: ссылка на главный холст
          '''
 
-        self.event_manager = arch.EventManager(ms_event_manager)
-        self.canvas = arch.Canvas(self.event_manager, ms_visual_manager,
-                                  ms_visual_manager.size, (0, 0), (0, 0, 0))
+        self.event_manager = base_arch.EventManager(ms_event_manager)
+        self.canvas = vis_arch.Canvas(self.event_manager, ms_visual_manager,
+                                      ms_visual_manager.size, (0, 0),
+                                      (0, 0, 0))
         self.gui = LevelSelectGUI(self.event_manager, self.canvas)
