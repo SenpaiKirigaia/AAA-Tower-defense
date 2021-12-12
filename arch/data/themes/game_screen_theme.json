@@ -109,9 +109,9 @@
 		},
 		"font":
 		{
-			"name": "pixeboy",
-			"size": "38",
-			"regular_path": "arch/data/fonts/Pixeboy.ttf"
+			"name": "pixelfont",
+			"size": "20",
+			"regular_path": "arch/data/fonts/PixelFont.ttf"
 		}
 	},
 	"wave-lbl":
@@ -123,9 +123,9 @@
 		},
 		"font":
 		{
-			"name": "pixeboy",
-			"size": "38",
-			"regular_path": "arch/data/fonts/Pixeboy.ttf"
+			"name": "pixelfont",
+			"size": "20",
+			"regular_path": "arch/data/fonts/PixelFont.ttf"
 		}
 	},
 	"money-lbl":
@@ -137,9 +137,9 @@
 		},
 		"font":
 		{
-			"name": "pixeboy",
-			"size": "40",
-			"regular_path": "arch/data/fonts/Pixeboy.ttf"
+			"name": "pixelfont",
+			"size": "21",
+			"regular_path": "arch/data/fonts/PixelFont.ttf"
 		}
 	}
 }

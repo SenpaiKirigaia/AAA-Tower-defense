@@ -8,9 +8,9 @@
 		},
 		"font":
 		{
-			"name": "pixeboy",
-			"size": "70",
-			"regular_path": "arch/data/fonts/Pixeboy.ttf"
+			"name": "pixelfont",
+			"size": "45",
+			"regular_path": "arch/data/fonts/PixelFont.ttf"
 		}
 	},
 	"lvl-1-btn":

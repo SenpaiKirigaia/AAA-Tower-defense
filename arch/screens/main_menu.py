@@ -45,14 +45,21 @@ class MainMenuGUI(gui.GUI):
                                    manager=self.ui_manager)
 
         title_lbl = gui.GUI.Label(
-                                   relative_rect=pg.Rect(200, 200, 600, 100),
+                                   relative_rect=pg.Rect(100, 200, 800, 100),
                                    text="AAA TOWER DEFFENSE",
                                    manager=self.ui_manager,
                                    object_id="title")
 
+        credits_lbl = gui.GUI.Label(
+                                   relative_rect=pg.Rect(300, 250, 400, 100),
+                                   text="by  SenpaiKirigaia  and  Co",
+                                   manager=self.ui_manager,
+                                   object_id="credits")
+
         self.buttons.update({"start-btn": start_btn})
         self.buttons.update({"quit-btn": quit_btn})
         self.labels.update({"title": title_lbl})
+        self.labels.update({"credits": credits_lbl})
 
     def button_handling(self, event):
         '''

@@ -3,6 +3,7 @@ import pygame as pg
 import arch.base_arch as base_arch
 import arch.vis_arch as vis_arch
 import arch.gui as gui
+import arch.model_wrap as mod_wp
 import arch.screens.pause_menu as pause_menu
 
 
@@ -154,13 +155,13 @@ class GameScreenGUI(gui.GUI):
                 time = int(func())
                 secs = time % 60
                 mins = time // 60
-                return f"{mins:02d} : {secs:02d}"
+                return f"{mins:02d}:{secs:02d}"
             return core
-        time_update = decor(self.event_manager.clock.get_time)
+        time_update = decor(self.game_screen.model_wrap.clock.get_time)
         time_linlbl = gui.GUI.LinkedLabel(time_lbl, time_update)
 
         money_lbl = gui.GUI.Label(
-                                  relative_rect=pg.Rect(120, 15, 110, 25),
+                                  relative_rect=pg.Rect(127, 18, 110, 25),
                                   text="",
                                   manager=self.ui_manager,
                                   container=shop_container,
@@ -172,7 +173,7 @@ class GameScreenGUI(gui.GUI):
                 money = func()
                 return f"{money:05d}"
             return core
-        money_update = decor(lambda: 0)
+        money_update = decor(self.game_screen.model_wrap.get_money)
         money_linlbl = gui.GUI.LinkedLabel(money_lbl, money_update)
 
         wave_lbl = gui.GUI.Label(
@@ -188,7 +189,7 @@ class GameScreenGUI(gui.GUI):
                 curr, full = func()
                 return f"{curr}/{full}"
             return core
-        wave_update = decor(lambda: (0, 0))
+        wave_update = decor(self.game_screen.model_wrap.get_wave)
         wave_linlbl = gui.GUI.LinkedLabel(wave_lbl, wave_update)
 
         self.linked_labels.update({"time-lbl": time_linlbl})
@@ -252,4 +253,5 @@ class GameScreen:
         self.canvas = vis_arch.Canvas(self.event_manager, ms_visual_manager,
                                       ms_visual_manager.size, (0, 0),
                                       (0, 0, 0))
+        self.model_wrap = mod_wp.ModelWrap(self.event_manager, self.canvas)
         self.gui = GameScreenGUI(self.event_manager, self.canvas, self)

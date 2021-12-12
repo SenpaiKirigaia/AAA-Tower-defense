@@ -8,9 +8,9 @@
 		},
 		"font":
 		{
-			"name": "pixeboy",
-			"size": "150",
-			"regular_path": "arch/data/fonts/Pixeboy.ttf"
+			"name": "pixelfont",
+			"size": "90",
+			"regular_path": "arch/data/fonts/PixelFont.ttf"
 		}
 	},
 	"button":
@@ -24,9 +24,9 @@
 	},
 		"font":
 		{
-			"name": "pixeboy",
-			"size": "40",
-			"regular_path": "arch/data/fonts/Pixeboy.ttf"
+			"name": "pixelfont",
+			"size": "30",
+			"regular_path": "arch/data/fonts/PixelFont.ttf"
 		}
 	}
 }

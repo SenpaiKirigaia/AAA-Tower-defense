@@ -36,7 +36,7 @@ class LevelSelectGUI(gui.GUI):
         self.size = visual_manager.size
 
         title_lbl = gui.GUI.Label(
-                                  relative_rect=pg.Rect(200, 50, 600, 100),
+                                  relative_rect=pg.Rect(100, 50, 800, 100),
                                   text="AAA TOWER DEFFENSE",
                                   manager=self.ui_manager,
                                   object_id="title")
