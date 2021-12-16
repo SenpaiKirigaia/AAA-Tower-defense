@@ -1,10 +1,9 @@
 import pygame_gui as pg_gui
 import pygame as pg
-import arch.base_arch as base_arch
-import arch.vis_arch as vis_arch
 import arch.gui as gui
+import arch.game_section as gm_sect
 import arch.model_wrap as mod_wp
-import arch.screens.pause_menu as pause_menu
+import arch.game_sections.pause_menu as pause_menu
 
 
 class GameScreenGUI(gui.GUI):
@@ -15,31 +14,27 @@ class GameScreenGUI(gui.GUI):
     Класс ГПИ игрового экрана
     '''
 
-    def __init__(self, event_manager, visual_manager, game_screen):
+    def __init__(self, event_manager, visual_manager, game_section):
         '''
         Init method of the game screen GUI
-        :param game_screen: link to the current game_screen
         :param event_manager: event manager that will manage this
                               GUI
         :param visual_manager: visual manager that will manage this
                                GUI
+        :param game_section: game section that owns this GUI
         '''
         '''
         Метод инициализации ГПИ игрового экрана
-        :param game_screen: ссылка на текущий игровой экран
         :param event_manager: менеджер событий, управляющий данным
                               ГПИ
         :param visual_manager: холст, на котором будет отрисован
                                данный ГПИ
-        '''
+        :param game_section: игровая секция, к которой относится
+                             данный ГПИ
+         '''
 
-        super().__init__(event_manager, visual_manager,
+        super().__init__(event_manager, visual_manager, game_section,
                          "./arch/data/themes/game_screen_theme.json")
-        self.size = self.visual_manager.size
-        self.game_screen = game_screen
-        self.panel_init()
-        self.button_init()
-        self.label_init()
 
     def panel_init(self):
         '''
@@ -157,7 +152,7 @@ class GameScreenGUI(gui.GUI):
                 mins = time // 60
                 return f"{mins:02d}:{secs:02d}"
             return core
-        time_update = decor(self.game_screen.model_wrap.clock.get_time)
+        time_update = decor(self.game_section.get_model_time)
         time_linlbl = gui.GUI.LinkedLabel(time_lbl, time_update)
 
         money_lbl = gui.GUI.Label(
@@ -173,7 +168,7 @@ class GameScreenGUI(gui.GUI):
                 money = func()
                 return f"{money:05d}"
             return core
-        money_update = decor(self.game_screen.model_wrap.get_money)
+        money_update = decor(self.game_section.get_model_money)
         money_linlbl = gui.GUI.LinkedLabel(money_lbl, money_update)
 
         wave_lbl = gui.GUI.Label(
@@ -189,7 +184,7 @@ class GameScreenGUI(gui.GUI):
                 curr, full = func()
                 return f"{curr}/{full}"
             return core
-        wave_update = decor(self.game_screen.model_wrap.get_wave)
+        wave_update = decor(self.game_section.get_model_wave)
         wave_linlbl = gui.GUI.LinkedLabel(wave_lbl, wave_update)
 
         self.linked_labels.update({"time-lbl": time_linlbl})
@@ -209,27 +204,14 @@ class GameScreenGUI(gui.GUI):
         '''
 
         if event.user_type == pg_gui.UI_BUTTON_PRESSED:
-            if event.ui_element is self.buttons["pause-btn"]:
-                master_manager = self.event_manager.master_manager
-                master_canvas = self.visual_manager.master_canvas
-                master_clock = master_manager.clock
-
-                rm_1 = base_arch.Manager.REMOVE_OBJ(self.visual_manager,
-                                                    address=master_canvas)
-
-                rm_2 = base_arch.Manager.REMOVE_OBJ(self.event_manager,
-                                                    address=master_manager)
-
-                rm_3 = base_arch.Manager.REMOVE_OBJ(self.event_manager.clock,
-                                                    address=master_clock)
-                pause_menu.PauseMenu(master_manager, master_canvas,
-                                     self.game_screen)
-                master_manager.post(rm_1)
-                master_manager.post(rm_2)
-                master_manager.post(rm_3)
+            if event.ui_object_id == "pause-btn":
+                self.game_section.unplug()
+                pause_menu.PauseMenu(self.game_section.ms_event_manager,
+                                     self.game_section.ms_visual_manager,
+                                     self.game_section)
 
 
-class GameScreen:
+class GameScreen(gm_sect.GameSection):
     '''
     Class of the game screen
     '''
@@ -249,9 +231,35 @@ class GameScreen:
         :param ms_visual_manager: ссылка на главный холст
          '''
 
-        self.event_manager = base_arch.EventManager(ms_event_manager)
-        self.canvas = vis_arch.Canvas(self.event_manager, ms_visual_manager,
-                                      ms_visual_manager.size, (0, 0),
-                                      (0, 0, 0))
+        super().__init__(ms_event_manager, ms_visual_manager, GameScreenGUI)
         self.model_wrap = mod_wp.ModelWrap(self.event_manager, self.canvas)
-        self.gui = GameScreenGUI(self.event_manager, self.canvas, self)
+
+    def get_model_time(self):
+        '''
+        Method that wraps the model_wrap.clock.get_time()
+        '''
+        '''
+        Метод обертка для метода model_wrap.clock.get_time()
+        '''
+
+        return self.model_wrap.clock.get_time()
+
+    def get_model_money(self):
+        '''
+        Method that wraps the model_wrap.get_money()
+        '''
+        '''
+        Метод обертка для метода model_wrap.get_money()
+        '''
+
+        return self.model_wrap.get_money()
+
+    def get_model_wave(self):
+        '''
+        Method that wraps the model_wrap.get_wave()
+        '''
+        '''
+        Метод обертка для метода model_wrap.get_wave()
+        '''
+
+        return self.model_wrap.get_wave()

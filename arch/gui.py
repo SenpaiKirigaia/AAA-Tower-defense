@@ -57,13 +57,15 @@ class GUI(base_arch.EventManager.Employee):
                      pg_gui.UI_BUTTON_ON_UNHOVERED,
                     )
 
-    def __init__(self, event_manager, visual_manager, theme_path=None):
+    def __init__(self, event_manager, visual_manager, game_section,
+                 theme_path=None):
         '''
         Init method of the GUI
         :param event_manager: event manager that will manage this
                               GUI
         :param visual_manager: visual manager that will manage this
                                GUI
+        :param game_section: game section that owns this GUI
         :param theme_path: path to theme file of gui, default value
                            is None for the standard theme
         '''
@@ -73,6 +75,8 @@ class GUI(base_arch.EventManager.Employee):
                               ГПИ
         :param visual_manager: холст, на котором будет отрисован
                                данный ГПИ
+        :param game_section: игровая секция, к которой относится
+                             данный ГПИ
         :param theme_path: путь к фалу с темой для ГПИ,
                            дефолтное значение - None соответствует
                            стандарнтной теме
@@ -80,6 +84,7 @@ class GUI(base_arch.EventManager.Employee):
 
         base_arch.EventManager.Employee.__init__(self, event_manager)
 
+        self.game_section = game_section
         self.visual_manager = visual_manager
         add_msg = vis_arch.Canvas.SET_GUI(target=self,
                                           address=self.visual_manager)
@@ -98,6 +103,40 @@ class GUI(base_arch.EventManager.Employee):
         self.labels = dict()
         self.panels = dict()
         self.linked_labels = dict()
+
+        self.panel_init()
+        self.button_init()
+        self.label_init()
+
+    def panel_init(self):
+        '''
+        Init method of all GUI panels
+        '''
+        '''
+        Метод инициализации всех панелей ГПИ
+        '''
+
+        pass
+
+    def button_init(self):
+        '''
+        init method of all GUI buttons
+        '''
+        '''
+        метод инициализации всех кнопок ГПИ
+        '''
+
+        pass
+
+    def label_init(self):
+        '''
+        init method of all GUI labels (including linked labels)
+        '''
+        '''
+        метод инициализации все надписей ГПИ (в том числе связанных)
+        '''
+
+        pass
 
     def draw(self):
         '''
