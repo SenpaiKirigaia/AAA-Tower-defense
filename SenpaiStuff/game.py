@@ -1,7 +1,7 @@
 import pygame
 import os
 from enemies.scorpion import Scorpion
-from towers.archerTower import ArcherTowerLong, ArcherTowerShort
+from towers.archerTower import ArcherTowerLong
 from towers.supportTower import DamageTower, RangeTower
 from menu.menu import VerticalMenu, PlayPauseButton
 import time
@@ -300,7 +300,7 @@ class Game:
     def add_tower(self, name):
         x, y = pygame.mouse.get_pos()
         name_list = ["buy_archer", "buy_archer_2", "buy_damage", "buy_range"]
-        object_list = [ArcherTowerLong(x,y), ArcherTowerShort(x,y), DamageTower(x,y), RangeTower(x,y)]
+        object_list = [ArcherTowerLong(x,y), DamageTower(x,y), RangeTower(x,y)]
 
         try:
             obj = object_list[name_list.index(name)]

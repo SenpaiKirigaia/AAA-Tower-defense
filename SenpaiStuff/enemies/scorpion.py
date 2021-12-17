@@ -15,8 +15,7 @@ class Scorpion(Enemy):
         super().__init__()
         self.name = "scorpion"
         self.money = 1
-        self.max_health = 4
-        self.alive = True
+        self.max_health = 2
         self.health = self.max_health
         self.imgs = imgs[:]
 

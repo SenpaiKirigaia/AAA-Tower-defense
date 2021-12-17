@@ -17,24 +17,18 @@ for x in range(1):
         pygame.image.load(os.path.join("game_assets/archer_towers/archer_1", str(x) + ".png")).convert_alpha(),
         (90, 90)))
 
-# load archer images
-for x in range(1):
-    archer_imgs1.append(
-        pygame.image.load(os.path.join("game_assets/archer_towers/archer_top", str(x) + ".png")).convert_alpha())
-
-
 class ArcherTowerLong(Tower):
     def __init__(self, x,y):
         super().__init__(x, y)
         self.tower_imgs = tower_imgs1[:]
-        self.archer_imgs = archer_imgs1[:]
+        self.archer_imgs = tower_imgs1[:]
         self.archer_count = 0
-        self.archer_fire_time = 240
+        self.archer_fire_time = 200
         self.range = 200
         self.original_range = self.range
         self.inRange = False
         self.left = True
-        self.damage = 2
+        self.damage = 1
         self.original_damage = self.damage
         self.width = self.height = 90
         self.moving = False
@@ -56,17 +50,11 @@ class ArcherTowerLong(Tower):
         super().draw_radius(win)
         super().draw(win)
 
-        if self.inRange and not self.moving:
+        if self.inRange:
             self.archer_count += 1
         else:
             self.archer_count = 0
 
-        archer = self.archer_imgs[0]
-        if self.left == True:
-            add = -25
-        else:
-            add = -archer.get_width() + 10
-        win.blit(archer, ((self.x + add), (self.y - archer.get_height() - 25)))
 
     def change_range(self, r):
         """
@@ -78,6 +66,7 @@ class ArcherTowerLong(Tower):
         """
         attacks an enemy in the enemy list, modifies the list
         """
+
         money = 0
         self.inRange = False
         enemy_closest = []
@@ -94,56 +83,27 @@ class ArcherTowerLong(Tower):
         enemy_closest = enemy_closest[::-1]
         if len(enemy_closest) > 0:
             first_enemy = enemy_closest[0]
-            if self.archer_count == self.archer_fire_time:
+            if self.archer_count >= self.archer_fire_time:
+                print("fire")
                 first_enemy.hit(self.damage)
-                if first_enemy.alive:
+                self.archer_count = 0
+                if first_enemy.dead:
                     money = first_enemy.money * 2
                     enemies.remove(first_enemy)
-            """
-            if first_enemy.x > self.x and not(self.left):
-                self.left = True
-                for x, img in enumerate(self.archer_imgs):
-                    self.archer_imgs[x] = pygame.transform.flip(img, True, False)
-                    
-            elif self.left and first_enemy.x < self.x:
-                self.left = False
-                for x, img in enumerate(self.archer_imgs):
-                    self.archer_imgs[x] = pygame.transform.flip(img, True, False)
-            """
+
         return money
 
 
 tower_imgs = []
-archer_imgs = []
 # load archer tower images
 for x in range(1):
     tower_imgs.append(pygame.transform.scale(
         pygame.image.load(os.path.join("game_assets/archer_towers/archer_2", str(x) + ".png")),
         (90, 90)))
 
-# load archer images
-for x in range(1):
-    archer_imgs.append(
-        pygame.image.load(os.path.join("game_assets/archer_towers/archer_top_2", str(x) + ".png")))
 
 
-class ArcherTowerShort(ArcherTowerLong):
-    def __init__(self, x,y):
-        super().__init__(x, y)
-        self.tower_imgs = tower_imgs[:]
-        self.archer_imgs = archer_imgs[:]
-        self.archer_count = 0
-        self.archer_fire_time = 150
-        self.range = 120
-        self.original_range = self.range
-        self.inRange = False
-        self.left = True
-        self.damage = 2
-        self.original_damage = self.damage
 
-        self.menu = Menu(self, self.x, self.y, menu_bg, [2500, 5500, "MAX"])
-        self.menu.add_btn(upgrade_btn, "Upgrade")
-        self.name = "archer2"
 
 
 
