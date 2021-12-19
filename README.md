@@ -1,3 +1,23 @@
 # AAA-Tower-defense
 
-Проект представляет из себя игру в широко известном жанре " Tower Defense". При этом, наша команда постаралась "по-новому" взглянуть на эту игру. Мы наполнили её авторской графикой, яркой музыкой и соответствующей колоритной атмосферой. Предлагаем Вам детальней ознакомится с нашей проектом посредством презентации (см. файл "Презентация проекта")
+## Short Introduction
+Group computer science project of MIPT LPR students. It is pathethic attempt \
+to get "хор.(5)" mark or at least "уд.(3)" via coding equally pathethic \
+tower defense game.
+
+## Installing
+```
+git clone https://github.com/SenpaiKirigaia/AAA-Tower-defense
+pip install -r AAA-Tower-defense/requirements.txt
+```
+
+## Acknowledgements
+Our group and espicially our lead programmer would like to express their \
+gratitude to the following people:
+1. Our seminarist Виталий Завадский AKA [Xenoner](https://github.com/xenoner1506) for being \
+   the nicest computer science teacher
+2. Author of pygame_gui package [MyreMalar](https://github.com/MyreMylar) for creating such 
+   a great package for GUI design
+3. Russion pop-singers [Maybe-baby](https://vk.com/artist/maybebaby) and [Dora](https://vk.com/artist/dora) for being the only \
+   reason for lead programmer to do the project instead of their\
+   physics assignment
