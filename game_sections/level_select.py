@@ -2,8 +2,8 @@ import pygame_gui as pg_gui
 import pygame as pg
 import arch.gui as gui
 import arch.game_section as gm_sect
-import arch.game_sections.main_menu as main_menu
-import arch.game_sections.game_screen as game_screen
+import game_sections.main_menu as main_menu
+import game_sections.game_screen as game_screen
 
 
 class LevelSelectGUI(gui.GUI):
@@ -34,7 +34,7 @@ class LevelSelectGUI(gui.GUI):
         '''
 
         super().__init__(event_manager, visual_manager, game_section,
-                         "./arch/data/themes/level_select_theme.json")
+                         "./assets/gui/themes/level_select_theme.json")
 
     def button_init(self):
         '''
@@ -48,36 +48,42 @@ class LevelSelectGUI(gui.GUI):
                                    relative_rect=pg.Rect(75, 160, 226, 218),
                                    text="",
                                    manager=self.ui_manager,
+                                   tool_tip_text="Level 1",
                                    object_id='lvl-1-btn')
 
         lvl_2_btn = gui.GUI.Button(
                                    relative_rect=pg.Rect(385, 160, 226, 218),
                                    text="",
                                    manager=self.ui_manager,
+                                   tool_tip_text="Level 2",
                                    object_id='lvl-2-btn')
 
         lvl_3_btn = gui.GUI.Button(
                                    relative_rect=pg.Rect(695, 160, 226, 218),
                                    text="",
                                    manager=self.ui_manager,
+                                   tool_tip_text="Level 3",
                                    object_id='lvl-3-btn')
 
         lvl_4_btn = gui.GUI.Button(
                                    relative_rect=pg.Rect(75, 445, 226, 218),
                                    text="",
                                    manager=self.ui_manager,
+                                   tool_tip_text="Level 4",
                                    object_id='lvl-4-btn')
 
         lvl_5_btn = gui.GUI.Button(
                                    relative_rect=pg.Rect(385, 445, 226, 218),
                                    text="",
                                    manager=self.ui_manager,
+                                   tool_tip_text="Level 5",
                                    object_id='lvl-5-btn')
 
         ret_btn = gui.GUI.Button(
                                  relative_rect=pg.Rect(695, 445, 226, 218),
                                  text="",
                                  manager=self.ui_manager,
+                                 tool_tip_text="Return to main menu",
                                  object_id='ret-btn')
 
         self.buttons.update({"lvl-1-btn": lvl_1_btn})
@@ -99,7 +105,7 @@ class LevelSelectGUI(gui.GUI):
 
         title_lbl = gui.GUI.Label(
                                   relative_rect=pg.Rect(100, 50, 800, 100),
-                                  text="AAA TOWER DEFFENSE",
+                                  text="AAA TOWER DEFENSE",
                                   manager=self.ui_manager,
                                   object_id="title")
 
@@ -122,10 +128,36 @@ class LevelSelectGUI(gui.GUI):
                 self.game_section.unplug()
                 main_menu.MainMenu(self.game_section.ms_event_manager,
                                    self.game_section.ms_visual_manager)
+
             elif event.ui_object_id == "lvl-1-btn":
                 self.game_section.unplug()
                 game_screen.GameScreen(self.game_section.ms_event_manager,
-                                       self.game_section.ms_visual_manager)
+                                       self.game_section.ms_visual_manager,
+                                       "./maps/lvl-1")
+
+            elif event.ui_object_id == "lvl-2-btn":
+                self.game_section.unplug()
+                game_screen.GameScreen(self.game_section.ms_event_manager,
+                                       self.game_section.ms_visual_manager,
+                                       "./maps/lvl-2")
+
+            elif event.ui_object_id == "lvl-3-btn":
+                self.game_section.unplug()
+                game_screen.GameScreen(self.game_section.ms_event_manager,
+                                       self.game_section.ms_visual_manager,
+                                       "./maps/lvl-3")
+
+            elif event.ui_object_id == "lvl-4-btn":
+                self.game_section.unplug()
+                game_screen.GameScreen(self.game_section.ms_event_manager,
+                                       self.game_section.ms_visual_manager,
+                                       "./maps/lvl-4")
+
+            elif event.ui_object_id == "lvl-5-btn":
+                self.game_section.unplug()
+                game_screen.GameScreen(self.game_section.ms_event_manager,
+                                       self.game_section.ms_visual_manager,
+                                       "./maps/lvl-5")
 
 
 class LevelSelect(gm_sect.GameSection):

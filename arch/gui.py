@@ -178,6 +178,38 @@ class GUI(base_arch.EventManager.Employee):
                 if event.user_type in GUI.button_events:
                     self.button_handling(event)
 
+    def remove_element(self, element_name):
+        '''
+        Method that removes the gui element with given name
+        :param element_name: name of the gui element to remove
+        '''
+        '''
+        Метод, удаляющий элемент ГПИ с данным именнем
+        :param element_name: имя элемента, который нужно удалить
+        '''
+
+        element = None
+        if element_name in self.buttons:
+            element = self.buttons[element_name]
+            del self.buttons[element_name]
+
+        elif element_name in self.panels:
+            element = self.panels[element_name]
+            del self.panels[element_name]
+
+        elif element_name in self.labels:
+            element = self.labels[element_name]
+            del self.labels[element_name]
+
+        elif element_name in self.linked_labels:
+            element = self.linked_labels[element_name]
+            del self.linked_labels[element_name]
+
+        if element is not None:
+            container = element.ui_container
+            container.remove_element(element)
+            self.ui_manager.get_sprite_group().remove_internal(element)
+
     def button_handling(self, event):
         '''
         Method for proccessing of button related events

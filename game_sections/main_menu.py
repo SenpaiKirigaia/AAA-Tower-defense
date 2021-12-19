@@ -3,7 +3,7 @@ import pygame as pg
 import arch.base_arch as base_arch
 import arch.gui as gui
 import arch.game_section as gm_sect
-import arch.game_sections.level_select as level_select
+import game_sections.level_select as level_select
 
 
 class MainMenuGUI(gui.GUI):
@@ -34,7 +34,7 @@ class MainMenuGUI(gui.GUI):
         '''
 
         super().__init__(event_manager, visual_manager, game_section,
-                         "./arch/data/themes/main_menu_theme.json")
+                         "./assets/gui/themes/main_menu_theme.json")
 
     def button_init(self):
         '''
@@ -69,7 +69,7 @@ class MainMenuGUI(gui.GUI):
 
         title_lbl = gui.GUI.Label(
                                    relative_rect=pg.Rect(100, 200, 800, 100),
-                                   text="AAA TOWER DEFFENSE",
+                                   text="AAA TOWER DEFENSE",
                                    manager=self.ui_manager,
                                    object_id="title")
 

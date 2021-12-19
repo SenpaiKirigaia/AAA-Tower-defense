@@ -2,7 +2,7 @@ import pygame_gui as pg_gui
 import pygame as pg
 import arch.gui as gui
 import arch.game_section as gm_sect
-import arch.game_sections.main_menu as main_menu
+import game_sections.main_menu as main_menu
 
 
 class PauseMenuGUI(gui.GUI):
@@ -33,7 +33,7 @@ class PauseMenuGUI(gui.GUI):
          '''
 
         super().__init__(event_manager, visual_manager, game_section,
-                         "./arch/data/themes/pause_menu_theme.json")
+                         "./assets/gui/themes/pause_menu_theme.json")
 
     def button_init(self):
         '''
