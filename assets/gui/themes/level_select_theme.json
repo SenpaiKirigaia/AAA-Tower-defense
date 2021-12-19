@@ -1,0 +1,133 @@
+{
+	"title":
+	{
+		"colours":
+		{
+             	 	"normal_text": "#fdf425",
+			"dark_bg": "#00000000"
+		},
+		"font":
+		{
+			"name": "pixelfont",
+			"size": "45",
+			"regular_path": "assets/gui/fonts/PixelFont.ttf"
+		}
+	},
+	"lvl-1-btn":
+	{
+		"images":
+		{
+			"normal_image":
+			{
+				"path": "assets/gui/images/level_select/lvl-1-prev-btn.png"
+			},
+			"hovered_image":
+			{
+				"path": "assets/gui/images/level_select/lvl-1-prev-btn-hov.png"
+			}
+		}
+		
+	},
+	"lvl-2-btn":
+	{
+		"images":
+		{
+			"normal_image":
+			{
+				"path": "assets/gui/images/level_select/lvl-2-prev-btn.png"
+			},
+			"hovered_image":
+			{
+				"path": "assets/gui/images/level_select/lvl-2-prev-btn-hov.png"
+			}
+		}
+		
+	},
+	"lvl-3-btn":
+	{
+		"images":
+		{
+			"normal_image":
+			{
+				"path": "assets/gui/images/level_select/lvl-3-prev-btn.png"
+			},
+			"hovered_image":
+			{
+				"path": "assets/gui/images/level_select/lvl-3-prev-btn-hov.png"
+			}
+		}
+		
+	},
+	"lvl-4-btn":
+	{
+		"images":
+		{
+			"normal_image":
+			{
+				"path": "assets/gui/images/level_select/lvl-4-prev-btn.png"
+			},
+			"hovered_image":
+			{
+				"path": "assets/gui/images/level_select/lvl-4-prev-btn-hov.png"
+			}
+		}
+		
+	},
+	"lvl-5-btn":
+	{
+		"images":
+		{
+			"normal_image":
+			{
+				"path": "assets/gui/images/level_select/lvl-5-prev-btn.png"
+			},
+			"hovered_image":
+			{
+				"path": "assets/gui/images/level_select/lvl-5-prev-btn-hov.png"
+			}
+		}
+		
+	},
+	"ret-btn":
+	{
+		"images":
+		{
+			"normal_image":
+			{
+				"path": "assets/gui/images/level_select/ret-btn.png"
+			},
+			"hovered_image":
+			{
+				"path": "assets/gui/images/level_select/ret-btn-hov.png"
+			}		
+		}
+	},
+	"tool_tip":
+	{
+		"misc":
+		{
+			"rect_width": "160"
+		}
+	},
+	"tool_tip.text_box":
+	{
+		"misc":
+		{	
+            		"shape": "rectangle",
+			"shape_corner_radius": "20",
+			"border_width": "1",
+            		"padding": "5,5"
+		},
+		"colours":
+		{
+			"dark_bg": "#000000"
+			
+		},
+		"font":
+		{
+			"name": "pixelfont",
+			"size": "20",
+			"regular_path": "assets/gui/fonts/PixelFont.ttf"
+		}
+	}
+}

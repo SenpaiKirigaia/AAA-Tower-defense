@@ -1,0 +1,32 @@
+{
+	"title":
+	{
+		"colours":
+		{
+             	 	"normal_text": "#fdf425",
+			"dark_bg": "#00000000"
+		},
+		"font":
+		{
+			"name": "pixelfont",
+			"size": "90",
+			"regular_path": "assets/gui/fonts/PixelFont.ttf"
+		}
+	},
+	"button":
+	{
+		"colours":
+		{
+             	 	"normal_text": "#fdf425",
+			"normal_bg": "#000000",
+	            	"hovered_text": "#fdf425",
+			"hovered_bg": "#2c2c2c"
+	},
+		"font":
+		{
+			"name": "pixelfont",
+			"size": "30",
+			"regular_path": "assets/gui/fonts/PixelFont.ttf"
+		}
+	}
+}

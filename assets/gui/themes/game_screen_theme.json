@@ -1,0 +1,251 @@
+{
+	"shop-pnl":
+	{
+		"images":
+		{
+			"background_image":
+			{
+				"path": "assets/gui/images/game_screen/shop/shop-pnl.png"
+			}
+		}
+	},
+	"time-pnl":
+	{
+		"images":
+		{
+			"background_image":
+			{
+				"path": "assets/gui/images/game_screen/time-pnl.png"
+			}
+		}
+	},
+	"wave-pnl":
+	{
+		"images":
+		{
+			"background_image":
+			{
+				"path": "assets/gui/images/game_screen/wave-pnl.png"
+			}
+		}
+	},
+	"health-pnl":
+	{
+		"images":
+		{
+			"background_image":
+			{
+				"path": "assets/gui/images/game_screen/health-pnl.png"
+			}
+		}
+	},
+	"pause-btn":
+	{
+		"images":
+		{
+			"normal_image":
+			{
+				"path": "assets/gui/images/game_screen/pause-btn.png"
+			},
+			"hovered_image":
+			{
+				"path": "assets/gui/images/game_screen/pause-btn-hov.png"
+			}		
+		}
+		
+	},
+	"buy-ARCHER-btn":
+	{
+		"images":
+		{
+			"normal_image":
+			{
+				"path": "assets/gui/images/game_screen/shop/buy-ARCHER-btn.png"
+			},
+			"hovered_image":
+			{
+				"path": "assets/gui/images/game_screen/shop/buy-ARCHER-btn-hov.png"
+			},
+			"disabled_image":
+			{
+				"path": "assets/gui/images/game_screen/shop/buy-ARCHER-btn-dis.png"
+			}		
+		}		
+	},
+	"buy-MINIGUN-btn":
+	{
+		"images":
+		{
+			"normal_image":
+			{
+				"path": "assets/gui/images/game_screen/shop/buy-MINIGUN-btn.png"
+			},
+			"hovered_image":
+			{
+				"path": "assets/gui/images/game_screen/shop/buy-MINIGUN-btn-hov.png"
+			},
+			"disabled_image":
+			{
+				"path": "assets/gui/images/game_screen/shop/buy-MINIGUN-btn-dis.png"
+			}		
+		}		
+	},
+	"buy-TANK-btn":
+	{
+		"images":
+		{
+			"normal_image":
+			{
+				"path": "assets/gui/images/game_screen/shop/buy-TANK-btn.png"
+			},
+			"hovered_image":
+			{
+				"path": "assets/gui/images/game_screen/shop/buy-TANK-btn-hov.png"
+			},
+			"disabled_image":
+			{
+				"path": "assets/gui/images/game_screen/shop/buy-TANK-btn-dis.png"
+			}		
+		}		
+	},
+	"sell-btn":
+	{
+		"images":
+		{
+			"normal_image":
+			{
+				"path": "assets/gui/images/game_screen/shop/sell-btn.png"
+			},
+			"hovered_image":
+			{
+				"path": "assets/gui/images/game_screen/shop/sell-btn-hov.png"
+			},
+			"disabled_image":
+			{
+				"path": "assets/gui/images/game_screen/shop/sell-btn-dis.png"
+			}		
+		}		
+	},
+	"cancel-btn":
+	{
+		"images":
+		{
+			"normal_image":
+			{
+				"path": "assets/gui/images/game_screen/cancel-btn.png"
+			},
+			"hovered_image":
+			{
+				"path": "assets/gui/images/game_screen/cancel-btn-hov.png"
+			}		
+		}		
+	},
+	"buy-plc-btn":
+	{
+		"colours":
+		{
+			"normal_bg": "#b0f08d",
+			"hovered_bg": "#fdf425",
+			"active_bg": "#fdf425",
+			"normal_border": "#b0f08d",
+			"hovered_border": "#fdf425",
+			"active_border": "#fdf425"
+		}
+	},
+	"sell-plc-btn":
+	{
+		"colours":
+		{
+			"normal_bg": "#fdf42590",
+			"hovered_bg": "#ff000060",
+			"active_bg": "#ff000060",
+			"normal_border": "#fdf42590",
+			"hovered_border": "#ff000060",
+			"active_border": "#ff000060"
+		}
+	},	
+	"time-lbl":
+	{
+		"colours":
+		{
+             	 	"normal_text": "#000000",
+			"dark_bg": "#00000000"
+		},
+		"font":
+		{
+			"name": "pixelfont",
+			"size": "20",
+			"regular_path": "assets/gui/fonts/PixelFont.ttf"
+		}
+	},
+	"wave-lbl":
+	{
+		"colours":
+		{
+             	 	"normal_text": "#000000",
+			"dark_bg": "#00000000"
+		},
+		"font":
+		{
+			"name": "pixelfont",
+			"size": "20",
+			"regular_path": "assets/gui/fonts/PixelFont.ttf"
+		}
+	},
+	"health-lbl":
+	{
+		"colours":
+		{
+             	 	"normal_text": "#000000",
+			"dark_bg": "#00000000"
+		},
+		"font":
+		{
+			"name": "pixelfont",
+			"size": "22",
+			"regular_path": "assets/gui/fonts/PixelFont.ttf"
+		}
+	},
+	"money-lbl":
+	{
+		"colours":
+		{
+             	 	"normal_text": "#ffffff",
+			"dark_bg": "#00000000"
+		},
+		"font":
+		{
+			"name": "pixelfont",
+			"size": "21",
+			"regular_path": "assets/gui/fonts/PixelFont.ttf"
+		}
+	},
+	"tool_tip":
+	{
+		"misc":
+		{
+			"rect_width": "160"
+		}
+	},
+	"tool_tip.text_box":
+	{
+		"misc":
+		{	
+            		"shape": "rectangle",
+			"shape_corner_radius": "20",
+			"border_width": "1",
+            		"padding": "5,5"
+		},
+		"colours":
+		{
+			"dark_bg": "#000000"
+			
+		},
+		"font":
+		{
+			"name": "pixelfont",
+			"size": "20",
+			"regular_path": "assets/gui/fonts/PixelFont.ttf"
+		}
+	}
+}
