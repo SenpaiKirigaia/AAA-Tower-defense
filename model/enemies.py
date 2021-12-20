@@ -63,7 +63,7 @@ class Enemy:
         :param dt: кол-во прошедшего времени
         '''
 
-        if self.state.name != self.state_lib.names.dying:
+        if not self.is_dying():
             if self.state.name != self.state_lib.names.default:
                 if self.state.is_ringing():
                     self.state = self.state_lib.default()
@@ -121,6 +121,16 @@ class Enemy:
         else:
             return True
 
+    def is_dying(self):
+        '''
+        Method that checks if the enemy is dying
+        '''
+        '''
+        Метод, проверяющий находится ли враг в процессе умирания
+        '''
+
+        return self.state.name == self.state_lib.names.dying
+
     def hit(self, dmg):
         '''
         Method that registers damage to the enemy
@@ -133,7 +143,7 @@ class Enemy:
 
         self.state = self.state_lib.hurt()
         self.hp -= dmg
-        if self.hp == 0:
+        if self.hp == 0 and not self.is_dying():
             self.battle_field.income(self.reward)
             self.state = self.state_lib.dying()
 

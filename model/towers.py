@@ -178,7 +178,7 @@ class AttackTower(Tower):
             enemy_pos = enemy.pos
             sq_dist = ((tower_pos[0] - enemy_pos[0])**2
                        + (tower_pos[1] - enemy_pos[1])**2)
-            if sq_dist <= self.act_range ** 2:
+            if sq_dist <= self.act_range ** 2 and not enemy.is_dying():
                 inrange_enemies.append(enemy)
 
         if len(inrange_enemies) > 0:
